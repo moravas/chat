@@ -16,6 +16,7 @@
 //! \section abb Terms and abbrevations
 //! * chat: an activity where two or more are sending messages to each other
 //!
+//! * program: synonym to "The Chat" application documentation wide.
 // =============================================================================
 //! \file
 //! \copyright
