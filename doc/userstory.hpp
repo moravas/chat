@@ -38,6 +38,15 @@
 //!     * When the user clicks on the name of a registered user, the text browser will be open on the blank page and
 //!         below it a text input field and a "Send" button
 //!     .
+//! -# <b>FT003:</b> I, as an authenticated user want to message one or more registered user at once separately or see,
+//! if it did same thing. The messages could be both of instant text and binary files.<br>
+//! <b>Acceptance criteria:</b>
+//!     * I type message into the text input field pressing Return or clicking on the "Send" button, the client receives
+//!         it and my username on the conversation header will be colored
+//!     * I can click on the button "Browse" below of "Send" and I can select the desired file. The selected file will be
+//!         upload to the server and conversation partner receives message about my activity. In the message it sees a
+//!         link that try to save the file with the default settings of the browser
+//!     .
 //!
 //! \section userstory User stories
 // =============================================================================
