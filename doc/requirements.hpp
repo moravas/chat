@@ -10,43 +10,28 @@
 //! \tableofcontents
 //! \section feature Features
 //!
-//! -# <b>FT001:</b> I, as an unauthenticated user want to see a username and password input fields, a link to
-//! register and another to require a forgot password and a login button on which I can perform the following actions:
-//!     * Typing my already registered username and password I can log in.
-//!     * Clicking on the "Forgot password?" link I can provide my already registered e-mail address and
-//!         a message will be sent with a new password.
-//!     * Clicking on the "Register" link, I can register by a valid e-mail address, username and password
-//!     .
-//! <b>Acceptance criteria:</b> The links to register as new user and require new password take place in
-//! horizontal order within the vertical order of "username", "password" input fields, links and "Login" button.
-//! All of them are in the center of the screen in a resolution independent manner. The actions are valid if
-//!     * The user can log in by its username and password
-//!     * The user receives an e-mail with a random generated OTP that the user must change just after login
-//!     * The user can register with username, e-mail and password. After the registration the user can log in
-//!     .
-//! -# <b>FT002:</b> I, as an authenticated user want to getting into the default screen after login where I see:
-//!     * my conversations in chronological order
-//!     * all other registered users in alphabetical order
-//!     * a large blank area
-//!     .
-//! and I can click on one of my last activity and read it or clicking on another user and send message to it.<br>
-//! <b>Acceptance criteria:</b>
-//!     * After log in the conversations and the registered users appear in a tab card on the left side. The tabs
-//!         holds the informations separately. The rest of the screen is inactive
-//!     * When the user clicks on one of its conversations, it will be opened on the blank area without possibility to
-//!         edit it: the text input field stay hidden
-//!     * When the user clicks on the name of a registered user, the text browser will be open on the blank page and
-//!         below it a text input field and a "Send" button
-//!     .
-//! -# <b>FT003:</b> I, as an authenticated user want to message one or more registered user at once separately or see,
-//! if it did same thing. The messages could be both of instant text and binary files.<br>
-//! <b>Acceptance criteria:</b>
-//!     * I type message into the text input field pressing Return or clicking on the "Send" button, the client receives
-//!         it and my username on the conversation header will be colored
-//!     * I can click on the button "Browse" below of "Send" and I can select the desired file. The selected file will be
-//!         upload to the server and conversation partner receives message about my activity. In the message it sees a
-//!         link that try to save the file with the default settings of the browser
-//!     .
+//! -# <b>FT001:</b> I, as a webservice client want to communicate in a fullduplex manner to the server via a secure chanel.<br>
+//! <b>Acceptance criteria:</b> The applied communication protocol is secure web socket(wss) or HTTPS that use TLS.
+//!
+//! -# <b>FT002:</b> I, as an unathenticated webservice client want to sign in into the server via my username and password.<br>
+//! <b>Acceptance criteria:</b> The client sends its username and password. If they indentify a registered user and valid, the
+//! server alow the client to log in.
+//!
+//! -# <b>FT003:</b> I, as an unathenticated webservice client want to register on the server.<br>
+//! <b>Acceptance criteria:</b> The client sends username, password and email address to the server via HTTPS POST.
+//! The registration is success if the username and password isn't already used on the server.
+//!
+//! -# <b>FT004:</b> I, as an authenticated webservice client want to get the list of registered users.<br>
+//! <b>Acceptance criteria:</b> The client sends an HTTPS GET and the response contains the username of registered users. The
+//! reply is empty only if there is no users registered on the server.
+//!
+//! -# <b>FT005:</b> I, as an authenticated webservice client want to get notification about the state change of the cleints.<br>
+//! <b>Acceptance criteria:</b> The client receives notification if the state of another users changed. The granularity of
+//! notifications is one user.
+//!
+//! -# <b>FT006:</b> I, as an authenticated webservice client want to send text messages to my conversation partner.<br>
+//! <b>Acceptance criteria:</b> The client sends HTTPS POST to the server that persists the message. If everithing was successfull,
+//! the conversation partner receives a notification.
 //!
 //! \section userstory User stories
 // =============================================================================
