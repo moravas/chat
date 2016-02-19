@@ -37,8 +37,8 @@
 //! <b>Acceptance criteria:</b> The client sends HTTPS GET to the server. The response response holds the list of conversations.
 //! The detailed conversation could be acquired by separate HTTPS GET.</div>
 //!
-//! -# <div id="FT008"><b>FT008:</b> I, as an authenticated web service client want to be able to store arbitrary size and count of configuration data on the
-//! server concerning to my client side application.<br>
+//! -# <div id="FT008"><b>FT008:</b> I, as an authenticated web service client want to be able to store arbitrary size and count of configuration
+//! data on the server concerning to my client side application.<br>
 //! <b>Acceptance criteria:</b> The client uses HTTPS POST to create or modify configuration data and DELETE for removing existing one.</div>
 //!
 //! \section userstory User stories
@@ -55,17 +55,17 @@
 //! -# <div id="US003"><b>US003:</b> Configuration management<br>
 //! <b>Affected features:</b> <a href="#FT002">FT002</a>, <a href="#FT008">FT008</a><br>
 //! Configuration data falls into to classes: the user and the server configuration data. While the user is allowed to change its data as it wants,
-//! the server side configuration is read-only and the server administrator has exclusive right to change them. From the webservice point of view both
+//! the server side configuration is read-only and the server administrator has exclusive right to change them. From the web-service point of view both
 //! kind of data are constant.<br>
 //!     -# Server configuration consist of two parts:
-//!         -# The configuration manager that is a software component and exists in the system as the single point to access configuration file. If the
-//!             required configuration data isn't in the configuration file, the configuration manager is responsible to provide a default value.
+//!         -# The configuration manager that is a software component and exists in the system as the single point to access configuration file. If
+//!             the required configuration data isn't in the configuration file, the configuration manager is responsible to provide a default value.
 //!         -# The configuration file that holds data in key-value pairs representation.
 //!         .
 //!     -# Client configuration data management:<br>
 //!     Client configuration data belongs to the specific user and takes place within the configuration table of the user. For details see
-//!     <a href="#configuration_data">user configuration table</a>. The webservice client allowed to create new or update an existent configuration item
-//!     by the following request:
+//!     <a href="#configuration_data">user configuration table</a>. The webservice client allowed to create new or update an existent configuration
+//!     item by the following request:
 //!     \code
 //!     POST https://<server_URL>[optional_port]/<username>/configuration
 //!     Content-Type: application/json
@@ -78,7 +78,7 @@
 //!     The operation can result the following error codes:
 //!         -# <b>200 OK: </b>Everything went fine, and there were no new item
 //!         -# <b>201 Created: </b>Everything went fine, but at least one key was new to the database. The new keys are listed in the body of the response
-//!         -# <b>400 Bad Request: </b>Unknown error occured
+//!         -# <b>400 Bad Request: </b>Unknown error occurred
 //!         -# <b>401 Unauthorized: </b>The request tried to access resource that is forbidden for it
 //!         .
 //!     If the client wants to delete item (e.g.: its not needed anymore), then it can be done by sending a DELETE request:
@@ -141,33 +141,49 @@
 //!         UNIQUE(email),
 //!         PRIMARY KEY (username));
 //!     \endcode
-//!     -# <div id="configuration_data"> The table where the user can store its client side configuration data. Existence of the table is optional and depends on client side requirements.
-//!     The table stores the following informations:
-//!         -# <b>key: </b> The text represented key that the user uses to access the particular option
-//!         -# <b>value: </b> The current configuration value
+//!     -# <div id="configuration_data"> The table where the user can store its client side configuration data. Existence of the table is optional
+//!         and depends on client side requirements. The table stores the following informations:
+//!         -# <b>key:</b> The text represented key that the user uses to access the particular option
+//!         -# <b>value:</b> The current configuration value
 //!         .
 //!     Creating the table has been done by the statement:<br>
 //!     \code
-//!     CREATE TABLE IF NOT EXISTS <username>.configuration<br> (
+//!     CREATE TABLE IF NOT EXISTS <username>.configuration (
 //!         key TEXT,
 //!         value TEXT NOT NULL,
 //!         PRIMARY KEY (key));
 //!     \endcode
 //!     </div>
-//!     -# Assuming that the continuous usage of Chat produces lots of data, the conversations are splitted up into several tables. The naming convention
-//!         of the table is CDDMMYYHHMMSS where:
-//!         -# <b>C: </b> Starting letter of "Conversation"
-//!         -# <b>DDMMYY: </b> Current date in UK format
-//!         -# <b>HHMMSS: </b> Current time
+//!     -# If a user wants to send binary information, its persisted into the "attachments" table. As configurations, attachments are also assigned
+//!         to the user in separated table. Each user reach attachments sent to it within its table. Take an example: Alice sends Bob an image, the
+//!         image is inserted into Bob's attachments table. The table stores the following informations:
+//!         -# <b>key:</b> Automincremented key for the next attachment in the table
+//!         -# <b>name:</b> The original file name
+//!         -# <b>attachment:</b> The file itself
+//!         .
+//!     Creating the table has been done by the statement:<br>
+//!     \code
+//!     CREATE TABLE IF NOT EXISTS <username>.attachments (
+//!         key SERIAL,
+//!         name VARCHAR(256) NOT NULL,
+//!         attachment BYTEA  NOT NULL,
+//!         PRIMARY KEY (key));
+//!     \endcode
+//!     -# Assuming that the continuous usage of Chat produces lots of data, the conversations are splitted up into several tables. The naming
+//!         convention of the table is CDDMMYYHHMMSS where:
+//!         -# <b>C:</b> Starting letter of "Conversation"
+//!         -# <b>DDMMYY:</b> Current date in UK format
+//!         -# <b>HHMMSS:</b> Current time
 //!         .
 //!     The date and time information matches to the table creation date and time. Each of the conversation tables contain configurable number of rows.
-//!     The default value is 1000000 rows and it can be overwritten via configuration file between 1 and 2^31 - 1. If the table reaches this row count, a
-//!     new table will be created by the web-service. The table stores the following informations:
-//!         -# <b>key: </b> Automincremented key for the conversation
-//!         -# <b>time: </b> The date and time-stamp where the web-service receives the new conversation. The time-stamp holds the timezone information as well,
-//!             that could be differ from the timezone of the message sender. In that case it's up to the client to recalculate the correct timezone.
-//!         -# <b>message: </b> The next message in a conversation
-//!         -# <b>user: </b> The author of the message
+//!     The default value is 1000000 rows and it can be overwritten via configuration file between 1 and 2^31 - 1. If the table reaches this row count,
+//!     a new table will be created by the web-service. The table stores the following informations:
+//!         -# <b>key:</b> Automincremented key for the conversation
+//!         -# <b>time:</b> The date and time-stamp where the web-service receives the new conversation. The time-stamp holds the timezone
+//!             information as well, that could be differ from the timezone of the message sender. In that case it's up to the client to recalculate
+//!             the correct timezone.
+//!         -# <b>message:</b> The next message in a conversation
+//!         -# <b>user:</b> The author of the message
 //!         .
 //!     Creating the table has been done by the statement:<br>
 //!     \code
