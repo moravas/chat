@@ -43,8 +43,10 @@
 //!
 //! \section userstory User stories
 //!
-//! -# <div id="US001"><b>US001:</b><br>
-//! <b>Affected features:</b> <a href="#FT001">FT001</a><br>
+//! -# <div id="US001"><b>US001:</b>Conversation<br>
+//! <b>Affected features:</b> <a href="#FT006">FT006</a><br>
+//! The process of the conversation between 2 particiapants can be splitted up to three parts regardless of the state of the participants:
+//!     -# <b>Initiate conversation:</b>
 //! </div>
 //!
 //! -# <div id="US002"><b>US002:</b> Request authentication<br>
@@ -150,7 +152,7 @@
 //!     \code
 //!     CREATE TABLE IF NOT EXISTS <username>.configuration (
 //!         key TEXT,
-//!         value TEXT NOT NULL,
+//!         value BYTEA NOT NULL,
 //!         PRIMARY KEY (key));
 //!     \endcode
 //!     </div>
