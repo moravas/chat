@@ -58,11 +58,11 @@
 //! the server side configuration is read-only and the server administrator has exclusive right to change them.<br>
 //! Server configuration consist of two parts:
 //!     -# The configuration manager that is a software component and exists in the system as the single point to access configuration file. If the
-//!         required configuration data isn't in the configuration file, the configuraition manager is responsible to provide a defautl value.
+//!         required configuration data isn't in the configuration file, the configuration manager is responsible to provide a default value.
 //!     -# The configuration file that holds data in key-value pairs representation.
 //!     .
 //! Client configuration data management:<br>
-//! Cleint configuration data belongs to the user so it takes place in the user table. </div>
+//! Client configuration data belongs to the user so it takes place in the user table. </div>
 //!
 //! -# <div id="US004"><b>US004:</b> Create user account<br>
 //! <b>Affected features:</b> <a href="#FT003">FT003</a><br>
@@ -86,7 +86,7 @@
 //!     .
 //! If these requirements are fulfilled, the web-server tries to append a new record into the user table. The user table uses the
 //! the user and password columns for primary key. Due to security reasons, only the hash of password is stored. Both column is fixed size character
-//! represented, and the size is derived from the maximal length of the usernam and the output size of the SHA512 algorithm. The email
+//! represented, and the size is derived from the maximal length of the username and the output size of the SHA512 algorithm. The email
 //! address also stored in a text column and a regexp should check whether it contains the '@' and '.' characters.<br>
 //! Depend on the success of the user account creation, the client receives the following error codes:
 //!     -# <b>201 Created: </b>Everything went fine, the user credential is active and the user now can log in.
@@ -99,23 +99,58 @@
 //! <b>Depends on user stories:</b> </a><br>
 //! <b>Affected features:</b> <a href="#FT003">FT003</a>, <a href="#FT008">FT008</a><br>
 //! The Chat based on PostgreSQL database and uses of the following tables:
-//!     -# The "users" table is the most imponrtant one because it stores every necessary informations about the registrered users. They are
+//!     -# The "users" table is the most important one because it stores every necessary informations about the registered users. They are
 //!         mandatory to register new users or authenticate an existent one. The table stores the following informations:
 //!         -# <b>username: </b> 256 character max length, stores the username, part of the primary key
 //!         -# <b>email: </b> 256 character max length, stores the email address of the user, part of the primary key
 //!         -# <b>pwd: </b> 256 character max length, stores the SHA512 hash of the password
 //!         .
 //!     Creating the table has been done by the statement:<br>
-//!     <em>CREATE TABLE IF NOT EXISTS users<br>(username VARCHAR(256) NOT NULL, email VARCHAR(256) NOT NULL, pwd VARCHAR(256) NOT NULL, UNIQUE(username, email), PRIMARY KEY (username, email));</em>
-//!     -# There is a table where the user can store its client side configuration data. Existence of the table is optional and depends on client side requirements.
+//!     \code
+//!     CREATE TABLE IF NOT EXISTS users(
+//!         username VARCHAR(256),
+//!         email VARCHAR(256) NOT NULL,
+//!         pwd VARCHAR(256) NOT NULL,
+//!         UNIQUE(email),
+//!         PRIMARY KEY (username));
+//!     \endcode
+//!     -# The table where the user can store its client side configuration data. Existence of the table is optional and depends on client side requirements.
 //!     The table stores the following informations:
 //!         -# <b>key: </b> The text represented key that the user uses to access the particular option
 //!         -# <b>value: </b> The current configuration value
 //!         .
 //!     Creating the table has been done by the statement:<br>
-//!     <em>CREATE TABLE IF NOT EXISTS \<username\>.configuration<br>(key TEXT NOT NULL, value TEXT NOT NULL, PRIMARY KEY (key));</em>
-//!
-//!
+//!     \code
+//!     CREATE TABLE IF NOT EXISTS <username>.configuration<br> (
+//!         key TEXT,
+//!         value TEXT NOT NULL,
+//!         PRIMARY KEY (key));
+//!     \endcode
+//!     -# Assuming that the continuous usage of Chat produces lots of data, the conversations are splitted up into several tables. The naming convention
+//!         of the table is CDDMMYYHHMMSS where:
+//!         -# <b>C: </b> Starting letter of "Conversation"
+//!         -# <b>DDMMYY: </b> Current date in UK format
+//!         -# <b>HHMMSS: </b> Current time
+//!         .
+//!     The date and time information matches to the table creation date and time. Each of the conversation tables contain configurable number of rows.
+//!     The default value is 1000000 rows and it can be overwritten via configuration file between 1 and 2^31 - 1. If the table reaches this row count, a
+//!     new table will be created by the web-service. The table stores the following informations:
+//!         -# <b>key: </b> Automincremented key for the conversation
+//!         -# <b>time: </b> The date and time-stamp where the web-service receives the new conversation. The time-stamp holds the timezone information as well,
+//!             that could be differ from the timezone of the message sender. In that case it's up to the client to recalculate the correct timezone.
+//!         -# <b>message: </b> The next message in a conversation
+//!         -# <b>user: </b> The author of the message
+//!         .
+//!     Creating the table has been done by the statement:<br>
+//!     \code
+//!     CREATE TABLE IF NOT EXISTS <CDDMMYYHHMMSS> (
+//!         key SERIAL,
+//!         time TIMESTAMP WITH TIME ZONE NOT NULL,
+//!         message TEXT NOT NULL,
+//!         user VARCHAR(256),
+//!         FOREIGN KEY (user) REFERENCES users (username),
+//!         PRIMARY KEY (key));
+//!     \endcode
 //!
 //! </div>
 //!
