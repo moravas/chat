@@ -54,26 +54,53 @@
 //!
 //! -# <div id="US003"><b>US003:</b> Configuration management<br>
 //! <b>Affected features:</b> <a href="#FT002">FT002</a>, <a href="#FT008">FT008</a><br>
-//! Configuration data can fall into to classes: the user and the server configuration data. While the user is allowed to change its data as it want,
-//! the server side configuration is read-only and the server administrator has exclusive right to change them.<br>
-//! Server configuration consist of two parts:
-//!     -# The configuration manager that is a software component and exists in the system as the single point to access configuration file. If the
-//!         required configuration data isn't in the configuration file, the configuration manager is responsible to provide a default value.
-//!     -# The configuration file that holds data in key-value pairs representation.
-//!     .
-//! Client configuration data management:<br>
-//! Client configuration data belongs to the user so it takes place in the user table. </div>
+//! Configuration data falls into to classes: the user and the server configuration data. While the user is allowed to change its data as it wants,
+//! the server side configuration is read-only and the server administrator has exclusive right to change them. From the webservice point of view both
+//! kind of data are constant.<br>
+//!     -# Server configuration consist of two parts:
+//!         -# The configuration manager that is a software component and exists in the system as the single point to access configuration file. If the
+//!             required configuration data isn't in the configuration file, the configuration manager is responsible to provide a default value.
+//!         -# The configuration file that holds data in key-value pairs representation.
+//!         .
+//!     -# Client configuration data management:<br>
+//!     Client configuration data belongs to the specific user and takes place within the configuration table of the user. For details see
+//!     <a href="#configuration_data">user configuration table</a>. The webservice client allowed to create new or update an existent configuration item
+//!     by the following request:
+//!     \code
+//!     POST https://<server_URL>[optional_port]/<username>/configuration
+//!     Content-Type: application/json
+//!     {
+//!     "key_0": "value_0",
+//!     "key_1": "value_1",
+//!     "key_n": "value_n",
+//!     }
+//!     \endcode
+//!     The operation can result the following error codes:
+//!         -# <b>200 OK: </b>Everything went fine, and there were no new item
+//!         -# <b>201 Created: </b>Everything went fine, but at least one key was new to the database. The new keys are listed in the body of the response
+//!         -# <b>400 Bad Request: </b>Unknown error occured
+//!         -# <b>401 Unauthorized: </b>The request tried to access resource that is forbidden for it
+//!         .
+//!     If the client wants to delete item (e.g.: its not needed anymore), then it can be done by sending a DELETE request:
+//!     \code
+//!     POST https://<server_URL>[optional_port]/<username>/configuration/<key_to_be_deleted>
+//!     \endcode
+//!     The operation result is <b>200 OK</b> in every cases.
+//!
+//!  </div>
 //!
 //! -# <div id="US004"><b>US004:</b> Create user account<br>
 //! <b>Affected features:</b> <a href="#FT003">FT003</a><br>
 //! Client registration has been done via the following HTTPS request:<br>
-//! POST https://\<server_URL\>[optional_port]/register<br>
-//! Content-Type: application/json<br>
-//! {<br>
-//! "username": "some",<br>
-//! "password": "pwd",<br>
-//! "email": "emailaddress"<br>
-//! }<br>
+//! \code
+//! POST https://<server_URL>[optional_port]/register
+//! Content-Type: application/json
+//! {
+//! "username": "some",
+//! "password": "pwd",
+//! "email": "emailaddress"
+//! }
+//! \endcode
 //! <br>
 //! The password:
 //!     -# Must be at least 8 long
@@ -114,7 +141,7 @@
 //!         UNIQUE(email),
 //!         PRIMARY KEY (username));
 //!     \endcode
-//!     -# The table where the user can store its client side configuration data. Existence of the table is optional and depends on client side requirements.
+//!     -# <div id="configuration_data"> The table where the user can store its client side configuration data. Existence of the table is optional and depends on client side requirements.
 //!     The table stores the following informations:
 //!         -# <b>key: </b> The text represented key that the user uses to access the particular option
 //!         -# <b>value: </b> The current configuration value
@@ -126,6 +153,7 @@
 //!         value TEXT NOT NULL,
 //!         PRIMARY KEY (key));
 //!     \endcode
+//!     </div>
 //!     -# Assuming that the continuous usage of Chat produces lots of data, the conversations are splitted up into several tables. The naming convention
 //!         of the table is CDDMMYYHHMMSS where:
 //!         -# <b>C: </b> Starting letter of "Conversation"
