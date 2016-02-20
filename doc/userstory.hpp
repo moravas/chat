@@ -40,6 +40,12 @@
 //! \endcode
 //! else the client receives the HTTP 401 Unauthorized.
 //!
+//! In the subsequent requests, the following additional header is included:
+//! 
+//! \code
+//! X-Authentication-Token: ***TOKEN***
+//! \endcode
+//!
 //! \subsection US003 US003: Configuration management
 //! <b>Affected features:</b> <a href="#FT002">FT002</a>, <a href="#FT008">FT008</a><br>
 //! Configuration data falls into to classes: the user and the server configuration data. While the user is allowed to change its data as it wants,
