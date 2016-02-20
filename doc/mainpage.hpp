@@ -9,7 +9,7 @@
 //! \mainpage The Chat
 //! \tableofcontents
 //! \section intro Introduction
-//!	Welcome to \ref The Chat documentation page! In this documentation you can find everythings related to the project's
+//!	Welcome to The Chat documentation page! In this documentation you can find everythings related to the project's
 //! architecture, known bugs or even of the user guide.
 //! \note Please keep in mind that the documentaion is under improvement, you can find missing or incompite chapters.
 //!

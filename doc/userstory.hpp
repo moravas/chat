@@ -8,53 +8,20 @@
 //!
 //! \page requirements Requirements
 //! \tableofcontents
-//! \section feature Features
-//!
-//! -# <div id="FT001"><b>FT001:</b> I, as a web-service client want to communicate in a full-duplex manner to the server via a secure channel.<br>
-//! <b>Acceptance criteria:</b> The applied communication protocol is secure web socket(wss) or HTTPS that use TLS.</div>
-//!
-//! -# <div id="FT002"><b>FT002:</b> I, as an unauthenticated web-service client want to sign in into the server by my username and password.<br>
-//! <b>Acceptance criteria:</b> The client sends its username and password. If they identify a registered user and are valid, the server
-//! allow the client to log in.</div>
-//!
-//! -# <div id="FT003"><b>FT003:</b> I, as an unauthenticated and unregistered web-service client want to register on the server.<br>
-//! <b>Acceptance criteria:</b> The client sends username, password and email address to the server via HTTPS POST. The registration
-//! is success if the username and password isn't already used on the server.</div>
-//!
-//! -# <div id="FT004"><b>FT004:</b> I, as an authenticated web-service client want to get the list of registered users.<br>
-//! <b>Acceptance criteria:</b> The client sends an HTTPS GET and the response contains the username of registered users. The reply
-//! is empty only if there is no users registered on the server.</div>
-//!
-//! -# <div id="FT005"><b>FT005:</b> I, as an authenticated web-service client want to get notification about the state change of the clients.<br>
-//! <b>Acceptance criteria:</b> The client receives notification if the state of another users changed. The granularity of notifications
-//! is one user.</div>
-//!
-//! -# <div id="FT006"><b>FT006:</b> I, as an authenticated web-service client want to send both of text messages and files to my conversation partner.<br>
-//! <b>Acceptance criteria:</b> The client sends HTTPS POST to the server that persists the message or file. If everything was successful,
-//! the conversation partner receives a notification.</div>
-//!
-//! -# <div id="FT007"><b>FT007:</b> I, as an authenticated web service client want to get the list of former conversations.<br>
-//! <b>Acceptance criteria:</b> The client sends HTTPS GET to the server. The response response holds the list of conversations.
-//! The detailed conversation could be acquired by separate HTTPS GET.</div>
-//!
-//! -# <div id="FT008"><b>FT008:</b> I, as an authenticated web service client want to be able to store arbitrary size and count of configuration
-//! data on the server concerning to my client side application.<br>
-//! <b>Acceptance criteria:</b> The client uses HTTPS POST to create or modify configuration data and DELETE for removing existing one.</div>
-//!
 //! \section userstory User stories
 //!
-//! -# <div id="US001"><b>US001:</b>Conversation<br>
+//! \subsection US001 US001: Conversation
 //! <b>Affected features:</b> <a href="#FT006">FT006</a><br>
 //! The process of the conversation between 2 particiapants can be splitted up to three parts regardless of the state of the participants:
 //!     -# <b>Initiate conversation:</b>
-//! </div>
+//!     .
 //!
-//! -# <div id="US002"><b>US002:</b> Request authentication<br>
+//! \subsection US002 US002: Request authentication
 //! <b>Affected features:</b> <a href="#FT002">FT002</a><br>
 //! The web-service listens on the default HTTPS port (443). This can be changed by configuration. Considering the stateless manner of the HTTPS
-//! protocol, the client shall send the username and password every time if it uses HTTPS verbs or one time if it opens a web-socket.</div>
+//! protocol, the client shall send the username and password every time if it uses HTTPS verbs or one time if it opens a web-socket.
 //!
-//! -# <div id="US003"><b>US003:</b> Configuration management<br>
+//! \subsection US003 US003: Configuration management
 //! <b>Affected features:</b> <a href="#FT002">FT002</a>, <a href="#FT008">FT008</a><br>
 //! Configuration data falls into to classes: the user and the server configuration data. While the user is allowed to change its data as it wants,
 //! the server side configuration is read-only and the server administrator has exclusive right to change them. From the web-service point of view both
@@ -78,10 +45,10 @@
 //!     }
 //!     \endcode
 //!     The operation can result the following error codes:
-//!         -# <b>200 OK: </b>Everything went fine, and there were no new item
-//!         -# <b>201 Created: </b>Everything went fine, but at least one key was new to the database. The new keys are listed in the body of the response
-//!         -# <b>400 Bad Request: </b>Unknown error occurred
-//!         -# <b>401 Unauthorized: </b>The request tried to access resource that is forbidden for it
+//!         -# <b>200 OK:</b> Everything went fine, and there were no new item
+//!         -# <b>201 Created:</b> Everything went fine, but at least one key was new to the database. The new keys are listed in the body of the response
+//!         -# <b>400 Bad Request:</b> Unknown error occurred
+//!         -# <b>401 Unauthorized:</b> The request tried to access resource that is forbidden for it
 //!         .
 //!     If the client wants to delete item (e.g.: its not needed anymore), then it can be done by sending a DELETE request:
 //!     \code
@@ -89,9 +56,7 @@
 //!     \endcode
 //!     The operation result is <b>200 OK</b> in every cases.
 //!
-//!  </div>
-//!
-//! -# <div id="US004"><b>US004:</b> Create user account<br>
+//! \subsection US004 US004: Create user account
 //! <b>Affected features:</b> <a href="#FT003">FT003</a><br>
 //! Client registration has been done via the following HTTPS request:<br>
 //! \code
@@ -103,7 +68,6 @@
 //! "email": "emailaddress"
 //! }
 //! \endcode
-//! <br>
 //! The password:
 //!     -# Must be at least 8 long
 //!     -# Must include numbers, lowercase and uppercase letters
@@ -121,55 +85,61 @@
 //!     -# <b>201 Created: </b>Everything went fine, the user credential is active and the user now can log in.
 //!     -# <b>400 Bad Request: </b>One or more argument of the registration is not fulfill the required form.
 //!     -# <b>409 Conflict: </b>There is an user already registered with the same username and password.
-//!     .
-//! </div>
 //!
-//! -# <div id="US005"><b>US005:</b> Database<br>
+//! \subsection US005 US005: Database
 //! <b>Depends on user stories:</b> </a><br>
 //! <b>Affected features:</b> <a href="#FT003">FT003</a>, <a href="#FT008">FT008</a><br>
 //! The Chat based on PostgreSQL database and uses of the following tables:
 //!     -# The "users" table is the most important one because it stores every necessary informations about the registered users. They are
 //!         mandatory to register new users or authenticate an existent one. The table stores the following informations:
-//!         -# <b>username: </b> 256 character max length, stores the username, part of the primary key
-//!         -# <b>email: </b> 256 character max length, stores the email address of the user, part of the primary key
-//!         -# <b>pwd: </b> 256 character max length, stores the SHA512 hash of the password
+//!         -# <b>username:</b> 256 character max length, stores the username, part of the primary key
+//!         -# <b>email:</b> 256 character max length, stores the email address of the user, part of the primary key
+//!         -# <b>pwd:</b> 256 character max length, stores the SHA512 hash of the password
+//!         -# <b>logoff:</b> The last log off time of the user. Using it optional and can affect the client side operations
 //!         .
-//!     Creating the table has been done by the statement:<br>
+//!     Creating the table has been done by the statement:
 //!     \code
-//!     CREATE TABLE IF NOT EXISTS users(
+//!     CREATE TABLE users(
 //!         username VARCHAR(256),
 //!         email VARCHAR(256) NOT NULL,
 //!         pwd VARCHAR(256) NOT NULL,
-//!         UNIQUE(email),
-//!         PRIMARY KEY (username));
+//!         logoff TIMESTAMP WITH TIME ZONE,
+//!         CONSTRAINT email_unique UNIQUE(email),
+//!         CONSTRAINT username_pk PRIMARY KEY (username));
 //!     \endcode
-//!     -# <div id="configuration_data"> The table where the user can store its client side configuration data. Existence of the table is optional
-//!         and depends on client side requirements. The table stores the following informations:
+//!     -# <div id="configuration_data"> The "configurations" table is used by the clients to store they client side configurations.The table
+//!         stores the following informations:
 //!         -# <b>key:</b> The text represented key that the user uses to access the particular option
 //!         -# <b>value:</b> The current configuration value
+//!         -# <b>user:</b> The username that the configuration records belongs to
 //!         .
-//!     Creating the table has been done by the statement:<br>
+//!     Creating the table has been done by the statement:
 //!     \code
-//!     CREATE TABLE IF NOT EXISTS <username>.configuration (
+//!     CREATE TABLE configurations(
 //!         key TEXT,
 //!         value BYTEA NOT NULL,
-//!         PRIMARY KEY (key));
+//!         user VARCHAR(256) NOT NULL,
+//!         CONSTRAINT user_fk FOREIGN KEY (user) REFERENCES users (username),
+//!         CONSTRAINT key_pk PRIMARY KEY (key));
 //!     \endcode
 //!     </div>
 //!     -# If a user wants to send binary information, its persisted into the "attachments" table. As configurations, attachments are also assigned
-//!         to the user in separated table. Each user reach attachments sent to it within its table. Take an example: Alice sends Bob an image, the
-//!         image is inserted into Bob's attachments table. The table stores the following informations:
+//!         to the user. Take an example: Alice sends Bob an image, the image is inserted by Bob's username into the table. The table stores the
+//!         following informations:
 //!         -# <b>key:</b> Automincremented key for the next attachment in the table
 //!         -# <b>name:</b> The original file name
 //!         -# <b>attachment:</b> The file itself
+//!         -# <b>user:</b> The user that the atteachment belongs to.
 //!         .
-//!     Creating the table has been done by the statement:<br>
+//!     Creating the table has been done by the statement:
 //!     \code
-//!     CREATE TABLE IF NOT EXISTS <username>.attachments (
+//!     CREATE TABLE attachments(
 //!         key SERIAL,
 //!         name VARCHAR(256) NOT NULL,
-//!         attachment BYTEA  NOT NULL,
-//!         PRIMARY KEY (key));
+//!         attachment BYTEA NOT NULL,
+//!         user VARCHAR(256) NOT NULL,
+//!         CONSTRAINT user_fk FOREIGN KEY (user) REFERENCES users (username),
+//!         CONSTRAINT key_pk PRIMARY KEY (key));
 //!     \endcode
 //!     -# Assuming that the continuous usage of Chat produces lots of data, the conversations are splitted up into several tables. The naming
 //!         convention of the table is CDDMMYYHHMMSS where:
@@ -177,7 +147,7 @@
 //!         -# <b>DDMMYY:</b> Current date in UK format
 //!         -# <b>HHMMSS:</b> Current time
 //!         .
-//!     The date and time information matches to the table creation date and time. Each of the conversation tables contain configurable number of rows.
+//!     The date and time information show when the table were created. Each of the conversation tables contain configurable number of rows.
 //!     The default value is 1000000 rows and it can be overwritten via configuration file between 1 and 2^31 - 1. If the table reaches this row count,
 //!     a new table will be created by the web-service. The table stores the following informations:
 //!         -# <b>key:</b> Automincremented key for the conversation
@@ -187,20 +157,18 @@
 //!         -# <b>message:</b> The next message in a conversation
 //!         -# <b>user:</b> The author of the message
 //!         .
-//!     Creating the table has been done by the statement:<br>
+//!     Creating the table has been done by the statement:
 //!     \code
-//!     CREATE TABLE IF NOT EXISTS <CDDMMYYHHMMSS> (
+//!     CREATE TABLE <CDDMMYYHHMMSS> (
 //!         key SERIAL,
 //!         time TIMESTAMP WITH TIME ZONE NOT NULL,
 //!         message TEXT NOT NULL,
 //!         user VARCHAR(256),
-//!         FOREIGN KEY (user) REFERENCES users (username),
-//!         PRIMARY KEY (key));
+//!         CONSTRAINT user_fk FOREIGN KEY (user) REFERENCES users (username),
+//!         CONSTRAINT key_pk PRIMARY KEY (key));
 //!     \endcode
-//!
-//! </div>
 //!
 // =============================================================================
 //! \file
 //! \copyright
-// ====================== end of file: requirements.hpp ========================
+// ======================= end of file: userstory.hpp ==========================
