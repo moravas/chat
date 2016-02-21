@@ -18,8 +18,33 @@
 //!
 //! \subsection US002 US002: Request authentication
 //! <b>Affected features:</b> <a href="#FT002">FT002</a><br>
+//! As an unauthenticated user, I'd like to sign in through the REST API by using HTTP POST in order to send my user name and password and receive 
+//! an yuthentication token that will be used in the future requests.
 //! The web-service listens on the default HTTPS port (443). This can be changed by configuration. Considering the stateless manner of the HTTPS
 //! protocol, the client shall send the username and password every time if it uses HTTPS verbs or one time if it opens a web-socket.
+//! 
+//! \code
+//! POST https://<server_URL>[optional_port]/login
+//! Content-Type: application/json
+//! {
+//!   "username": "some",
+//!   "password": "pwd",
+//! }
+//! \endcode
+//! If the login is successful, the client receives the HTTP 200 OK response:
+//! \code
+//! Content-Type: application/json
+//! {
+//!   "token": "***TOKEN***",
+//! }
+//! \endcode
+//! else the client receives the HTTP 401 Unauthorized.
+//!
+//! In the subsequent requests, the following additional header is included:
+//! 
+//! \code
+//! X-Authentication-Token: ***TOKEN***
+//! \endcode
 //!
 //! \subsection US003 US003: Configuration management
 //! <b>Affected features:</b> <a href="#FT002">FT002</a>, <a href="#FT008">FT008</a><br>
