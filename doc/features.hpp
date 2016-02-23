@@ -29,9 +29,10 @@
 //! <b>Acceptance criteria:</b> The client receives notification if the state of another users changed. The granularity of notifications
 //! is one user.</div>
 //!
-//! -# <div id="FT006"><b>FT006:</b> I, as an authenticated web-service client want to send both of text messages and files to my conversation partner.<br>
+//! -# <div id="FT006"><b>FT006:</b> I, as an authenticated web-service client want to send both of text messages and files to my conversation
+//!     partner regardless of its state..<br>
 //! <b>Acceptance criteria:</b> The client sends HTTPS POST to the server that persists the message or file. If everything was successful,
-//! the conversation partner receives a notification.</div>
+//! the conversation partner receives a notification at least at the next log on.</div>
 //!
 //! -# <div id="FT007"><b>FT007:</b> I, as an authenticated web service client want to get the list of former conversations.<br>
 //! <b>Acceptance criteria:</b> The client sends HTTPS GET to the server. The response response holds the list of conversations.
