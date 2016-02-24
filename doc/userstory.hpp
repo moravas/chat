@@ -10,12 +10,6 @@
 //! \tableofcontents
 //! \section userstory User stories
 //!
-//! \subsection US001 US001: Conversation
-//! <b>Affected features:</b> <a href="#FT006">FT006</a><br>
-//! The process of the conversation between 2 particiapants can be splitted up to three parts regardless of the state of the participants:
-//!     -# <b>Initiate conversation:</b>
-//!     .
-//!
 //! \subsection US002 US002: Request authentication
 //! <b>Affected features:</b> <a href="#FT002">FT002</a><br>
 //! As an unauthenticated user, I'd like to sign in through the REST API by using HTTP POST in order to send my user name and password and receive 
@@ -117,44 +111,46 @@
 //! The Chat based on PostgreSQL database and uses of the following tables:
 //!     -# The "users" table is the most important one because it stores every necessary informations about the registered users. They are
 //!         mandatory to register new users or authenticate an existent one. The table stores the following informations:
-//!         -# <b>username:</b> 256 character max length, stores the username, part of the primary key
-//!         -# <b>email:</b> 256 character max length, stores the email address of the user, part of the primary key
+//!         -# <b>id:</b> autoincremented integer key
+//!         -# <b>username:</b> 256 character max length, stores the username
+//!         -# <b>email:</b> 256 character max length, stores the email address of the user
 //!         -# <b>pwd:</b> 256 character max length, stores the SHA512 hash of the password
 //!         -# <b>logoff:</b> The last log off time of the user. Using it optional and can affect the client side operations
 //!         .
 //!     Creating the table has been done by the statement:
 //!     \code
 //!     CREATE TABLE users(
-//!         username VARCHAR(256),
+//!         id SERIAL,
+//!         username VARCHAR(256) NOT NULL,
 //!         email VARCHAR(256) NOT NULL,
 //!         pwd VARCHAR(256) NOT NULL,
 //!         logoff TIMESTAMP WITH TIME ZONE,
-//!         CONSTRAINT email_unique UNIQUE(email),
-//!         CONSTRAINT username_pk PRIMARY KEY (username));
+//!         CONSTRAINT unique_constraints UNIQUE(username, email, pwd),
+//!         CONSTRAINT users_pk PRIMARY KEY (id));
 //!     \endcode
 //!     -# <div id="configuration_data"> The "configurations" table is used by the clients to store they client side configurations.The table
 //!         stores the following informations:
 //!         -# <b>key:</b> The text represented key that the user uses to access the particular option
 //!         -# <b>value:</b> The current configuration value
-//!         -# <b>user:</b> The username that the configuration records belongs to
+//!         -# <b>user_id:</b> The username that the configuration records belongs to
 //!         .
 //!     Creating the table has been done by the statement:
 //!     \code
 //!     CREATE TABLE configurations(
 //!         key TEXT,
 //!         value BYTEA NOT NULL,
-//!         user VARCHAR(256) NOT NULL,
-//!         CONSTRAINT user_fk FOREIGN KEY (user) REFERENCES users (username),
-//!         CONSTRAINT key_pk PRIMARY KEY (key));
+//!         user_id SERIAL NOT NULL,
+//!         CONSTRAINT configurations_fk FOREIGN KEY (user_id) REFERENCES users (id),
+//!         CONSTRAINT configurations_pk PRIMARY KEY (key));
 //!     \endcode
 //!     </div>
-//!     -# If a user wants to send binary information, its persisted into the "attachments" table. As configurations, attachments are also assigned
+//!     -# If a user wants to send binary information, it is persisted into the "attachments" table. As configurations, attachments are also assigned
 //!         to the user. Take an example: Alice sends Bob an image, the image is inserted by Bob's username into the table. The table stores the
 //!         following informations:
 //!         -# <b>key:</b> Automincremented key for the next attachment in the table
 //!         -# <b>name:</b> The original file name
 //!         -# <b>attachment:</b> The file itself
-//!         -# <b>user:</b> The user that the atteachment belongs to.
+//!         -# <b>user_id:</b> The user that the atteachment belongs to.
 //!         .
 //!     Creating the table has been done by the statement:
 //!     \code
@@ -162,36 +158,106 @@
 //!         key SERIAL,
 //!         name VARCHAR(256) NOT NULL,
 //!         attachment BYTEA NOT NULL,
-//!         user VARCHAR(256) NOT NULL,
-//!         CONSTRAINT user_fk FOREIGN KEY (user) REFERENCES users (username),
-//!         CONSTRAINT key_pk PRIMARY KEY (key));
+//!         user_id SERIAL NOT NULL,
+//!         CONSTRAINT attachments_fk FOREIGN KEY (user_id) REFERENCES users (id),
+//!         CONSTRAINT attachments_pk PRIMARY KEY (key));
 //!     \endcode
-//!     -# Assuming that the continuous usage of Chat produces lots of data, the conversations are splitted up into several tables. The naming
-//!         convention of the table is CDDMMYYHHMMSS where:
-//!         -# <b>C:</b> Starting letter of "Conversation"
-//!         -# <b>DDMMYY:</b> Current date in UK format
-//!         -# <b>HHMMSS:</b> Current time
-//!         .
-//!     The date and time information show when the table were created. Each of the conversation tables contain configurable number of rows.
-//!     The default value is 1000000 rows and it can be overwritten via configuration file between 1 and 2^31 - 1. If the table reaches this row count,
-//!     a new table will be created by the web-service. The table stores the following informations:
+//!     -# The "conversations" table stores the text based messages. It stores the following informations:
 //!         -# <b>key:</b> Automincremented key for the conversation
-//!         -# <b>time:</b> The date and time-stamp where the web-service receives the new conversation. The time-stamp holds the timezone
-//!             information as well, that could be differ from the timezone of the message sender. In that case it's up to the client to recalculate
-//!             the correct timezone.
+//!         -# <b>time:</b> The date and time-stamp where the web-service receives the new message. The time-stamp holds the timezone information as
+//!             well, that could be differ from the timezone of the message sender. In that case it's up to the client to recalculate the correct
+//!             timezone.
 //!         -# <b>message:</b> The next message in a conversation
-//!         -# <b>user:</b> The author of the message
+//!         -# <b>sender_id:</b> The author of the message
+//!         -# <b>receiver_id:</b> The addressee of the message
 //!         .
 //!     Creating the table has been done by the statement:
 //!     \code
-//!     CREATE TABLE <CDDMMYYHHMMSS> (
-//!         key SERIAL,
+//!     CREATE TABLE conversations (
+//!         key BIGSERIAL,
 //!         time TIMESTAMP WITH TIME ZONE NOT NULL,
 //!         message TEXT NOT NULL,
-//!         user VARCHAR(256),
-//!         CONSTRAINT user_fk FOREIGN KEY (user) REFERENCES users (username),
-//!         CONSTRAINT key_pk PRIMARY KEY (key));
+//!         sender_id SERIAL,
+//!         CONSTRAINT conversations_sender_fk FOREIGN KEY (sender_id) REFERENCES users (id),
+//!         CONSTRAINT conversations_pk PRIMARY KEY (key));
 //!     \endcode
+//!     In order to create connection between the message and the user, an additonal switch table should be used, that stores:
+//!         -# <b>message:</b> The Id of the message
+//!         -# <b>user:</b> The user who received the message
+//!     Creating the table has been done by the statement:
+//!     \code
+//!     CREATE TABLE message_user_switch (
+//!         message BIGSERIAL NOT NULL,
+//!         user SERIAL NOT NULL,
+//!         CONSTRAINT message_user_switch_message_fk FOREIGN KEY (message) REFERENCES conversations (key),
+//!         CONSTRAINT message_user_switch_user_fk FOREIGN KEY (user) REFERENCES users (id));
+//!     \endcode
+//!
+//! \subsection US006 US006: Conversation manager
+//! <b>Affected features:</b> <a href="#FT006">FT006</a><br>
+//! Conversation messages are based on JSON represented text messages. They can play both of command and message roles. For example, inviting a new
+//! participant can be done by the message:
+//! \code
+//!     { "invite":[ {"username":"user"} ]}
+//! \endcode
+//! or:
+//! \code
+//!     { "id": "124", "invite":[ {"username":"user"} ]}
+//! \endcode
+//! The examples above are similar. The only difference is that the first one creates a new session as well otherwise invites the user "user" into
+//! the session labeled by session ID "124". Invited users are represented as array even if only one user were invited. Closing a session is very
+//! similar:
+//! \code
+//!     { "id": "124", "close":"user" }
+//! \endcode
+//! Receiving the close message only accepted form the client who wants to exit from a particular session. Excluding another user is prohibited. The
+//! server should be prepared to prevent such a cases because they assume attack against to the server or another clients. If there are no more clients
+//! in the current session except the sender one, the Session listener will send back an empty session message:
+//! \code
+//!     { "id": "124", "property":"empty" }
+//! \endcode
+//! In this case, it is up to the client to discard the message or re-invite the participants and sends the message again.
+//! The messages above are command which targets the server to perform some operations on it, but for messaging client around the word should be
+//! forward the incoming message.
+//!
+//! The text message looks like this:
+//! \code
+//!     {
+//!     "id": "124",
+//!     "sender":"user",
+//!     "message": "arbitrary text message"
+//!     }
+//! \endcode
+//! It can be seen that the message doesn't holds any information the addresses, but the originator is present.
+//!
+//! \subsubsection initiate_conversation Initiate conversation
+//! After the client logged on to the server, the client is responsible for opening a new socket. This socket will be registered by Conversation
+//! manager identified by the username. If the user sends an invitation message to the server, the Conversation manager looks for the session ID in
+//! the message and use it or create a new one and checks whether a connection exists identified by the username.
+//!     -# If there were no session ID in the invitation message, the Conversation manager deploys new Session Listener and provides to it a list
+//!         containing the username and sockets. If it is done, the Conversation manager sends back the session ID to the client.
+//!     -# If the session already exists, the session manager appends the list (at least one item) of invited username and socket pairs to the
+//!         Session listener.
+//!     .
+//! \note The socket could be NULL, in this case the client sends off-line messages that could be queried by the conversation partner it will be
+//! back again.
+//!
+//! \subsubsection conversation Conversation
+//! If the new message received by the Conversation manager, it looks for a Session listener specified by the session ID and forward the message to it.
+//! The Session listener perform the following operations:
+//!     -# Persist the message into the "conversations" table
+//!     -# Persist insert the message ID and the ID of addressed users into the "message_user_switch" table
+//!     -# Walk trough its listeners and forwards the message to them except the sender and off-line clients
+//!     .
+//! If any error occurred during these operations, the Session listener will hang on its activity and returns to the Conversation manager.
+//!
+//! \subsubsection close_conversation Close conversation
+//! If the client wants to exit from a conversation, sends the "close" command to the server. In this case the socket itself still alive, but the
+//! Session listener unregisters the particular client. After exiting from the session, the client doesn't receive messages from clients in that
+//! session. Re-invite the client is possible into the session.
+//!
+//! If the client closes the socket as well, the Conversation manager is responsible for unregister the socket from the Session listeners and persist
+//! the log off time-stamp into the "users" table.
 //!
 // =============================================================================
 //! \file
