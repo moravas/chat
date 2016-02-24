@@ -19,7 +19,7 @@
 //! \subsection US002 US002: Request authentication
 //! <b>Affected features:</b> <a href="#FT002">FT002</a><br>
 //! As an unauthenticated user, I'd like to sign in through the REST API by using HTTP POST in order to send my user name and password and receive 
-//! an yuthentication token that will be used in the future requests.
+//! an authentication token that will be used in the future requests.
 //! The web-service listens on the default HTTPS port (443). This can be changed by configuration. Considering the stateless manner of the HTTPS
 //! protocol, the client shall send the username and password every time if it uses HTTPS verbs or one time if it opens a web-socket.
 //! 
