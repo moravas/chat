@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Http;
 
 namespace Server
@@ -7,28 +6,27 @@ namespace Server
     [RoutePrefix("users")]
     public class AccountController : ApiController
     {
-        [Route("")]
+        [Route("{username}")]
         [HttpDelete]
-        public string DeleteUserAccount()
+        public string DeleteUserAccount(string username)
         {
-            string headerValues = Request.Headers.GetValues("MyCustomID").FirstOrDefault();
-            Console.WriteLine(headerValues);
+            Console.WriteLine(username);
             return "DeleteUserAccount";
         }
 
         [Route("login")]
         [HttpGet]
-        public string Login()
+        public string GetLogin([FromBody] string credentials)
         {
-            Console.WriteLine(Request.Content);
+            Console.WriteLine(credentials);
             return "Login";
         }
 
-        [Route("")]
+        [Route("register")]
         [HttpPost]
-        public string Register()
+        public string Register([FromBody] string credentials)
         {
-            Console.WriteLine(Request.Content);
+            Console.WriteLine(credentials);
             return "Register";
         }
     }
