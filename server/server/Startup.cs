@@ -1,7 +1,7 @@
 ﻿using Owin;
 using System.Web.Http;
 
-namespace server
+namespace Server
 {
     public class WebApiConfig
     {
@@ -9,7 +9,15 @@ namespace server
         {
             // Configure Web API for self-host. 
             HttpConfiguration config = new HttpConfiguration();
-            config.MapHttpAttributeRoutes();
+            
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
+            //config.MapHttpAttributeRoutes();
+
             appBuilder.UseWebApi(config);
         }
     }
