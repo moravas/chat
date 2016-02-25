@@ -12,13 +12,11 @@
 //!
 //! \subsection US002 US002: Request authentication
 //! <b>Affected features:</b> <a href="#FT002">FT002</a><br>
-//! As an unauthenticated user, I'd like to sign in through the REST API by using HTTP POST in order to send my user name and password and receive 
+//! As an unauthenticated user, I'd like to sign in through the REST API by using HTTP POST in order to send my user name and password and receive
 //! an yuthentication token that will be used in the future requests.
-//! The web-service listens on the default HTTPS port (443). This can be changed by configuration. Considering the stateless manner of the HTTPS
-//! protocol, the client shall send the username and password every time if it uses HTTPS verbs or one time if it opens a web-socket.
-//! 
+//! The web-service listens on the default HTTPS port (443). This can be changed by configuration.
 //! \code
-//! POST https://<server_URL>[optional_port]/login
+//! POST https://<server_URL>[optional_port]/users/login
 //! Content-Type: application/json
 //! {
 //!   "username": "some",
@@ -35,10 +33,15 @@
 //! else the client receives the HTTP 401 Unauthorized.
 //!
 //! In the subsequent requests, the following additional header is included:
-//! 
 //! \code
 //! X-Authentication-Token: ***TOKEN***
 //! \endcode
+//!
+//! If the client decides to leave the server finally, it can delete the account of user by the following request:
+//! \code
+//! DELETE https://<server_URL>[optional_port]/users/<username>
+//! \endcode
+//! This action causes deletion of its configurations as well.
 //!
 //! \subsection US003 US003: Configuration management
 //! <b>Affected features:</b> <a href="#FT002">FT002</a>, <a href="#FT008">FT008</a><br>
@@ -55,7 +58,7 @@
 //!     <a href="#configuration_data">user configuration table</a>. The webservice client allowed to create new or update an existent configuration
 //!     item by the following request:
 //!     \code
-//!     POST https://<server_URL>[optional_port]/<username>/configuration
+//!     POST https://<server_URL>[optional_port]/configuration/<username>
 //!     Content-Type: application/json
 //!     {
 //!     "key_0": "value_0",
@@ -71,7 +74,7 @@
 //!         .
 //!     If the client wants to delete item (e.g.: its not needed anymore), then it can be done by sending a DELETE request:
 //!     \code
-//!     POST https://<server_URL>[optional_port]/<username>/configuration/<key_to_be_deleted>
+//!     DELETE https://<server_URL>[optional_port]/configuration/<username>/<key_to_be_deleted>
 //!     \endcode
 //!     The operation result is <b>200 OK</b> in every cases.
 //!
@@ -79,7 +82,7 @@
 //! <b>Affected features:</b> <a href="#FT003">FT003</a><br>
 //! Client registration has been done via the following HTTPS request:<br>
 //! \code
-//! POST https://<server_URL>[optional_port]/register
+//! POST https://<server_URL>[optional_port]/users/register
 //! Content-Type: application/json
 //! {
 //! "username": "some",
