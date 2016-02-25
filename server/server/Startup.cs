@@ -16,7 +16,7 @@ namespace Server
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            //config.MapHttpAttributeRoutes();
+            config.MapHttpAttributeRoutes();
 
             appBuilder.UseWebApi(config);
         }
