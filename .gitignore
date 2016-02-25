@@ -1,2 +1,7 @@
 html/*
 *~
+server/server/obj/*
+server/.vs/server/v14/.suo
+server/server/bin/*
+server/packages/*
+*.orig
