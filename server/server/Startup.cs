@@ -1,5 +1,6 @@
 ﻿using Owin;
 using System.Web.Http;
+using Swashbuckle.Application;
 
 namespace Server
 {
@@ -17,6 +18,13 @@ namespace Server
             );
 
             config.MapHttpAttributeRoutes();
+
+            config
+                .EnableSwagger(c =>
+                {
+                    c.SingleApiVersion("v1", "A title for your API");
+                })
+                .EnableSwaggerUi();  
 
             appBuilder.UseWebApi(config);
         }
