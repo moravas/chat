@@ -2,31 +2,34 @@
 using System.Linq;
 using System.Web.Http;
 
-namespace server
+namespace Server
 {
-    [Route("users")]
-    class AccountManager : ApiController
+    [RoutePrefix("users")]
+    public class AccountController : ApiController
     {
         [Route("")]
         [HttpDelete]
-        public void DeleteUserAccount()
+        public string DeleteUserAccount()
         {
             string headerValues = Request.Headers.GetValues("MyCustomID").FirstOrDefault();
             Console.WriteLine(headerValues);
+            return "DeleteUserAccount";
+        }
+
+        [Route("login")]
+        [HttpGet]
+        public string Login()
+        {
+            Console.WriteLine(Request.Content);
+            return "Login";
         }
 
         [Route("")]
-        [HttpGet]
-        public void Login()
-        {
-            Console.WriteLine(Request.Content);
-        }
-
-        [Route("/register")]
         [HttpPost]
-        public void Register()
+        public string Register()
         {
             Console.WriteLine(Request.Content);
+            return "Register";
         }
     }
 }
