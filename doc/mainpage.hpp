@@ -6,7 +6,7 @@
 //! \note
 // =============================================================================
 
-//! \mainpage The Chat
+//! \mainpage The Chat - The goal is the way itself
 //! \tableofcontents
 //! \section intro Introduction
 //!	Welcome to The Chat documentation page! In this documentation you can find everythings related to the project's
