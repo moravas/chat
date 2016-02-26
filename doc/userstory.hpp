@@ -13,7 +13,7 @@
 //! \subsection US002 US002: Request authentication
 //! <b>Affected features:</b> <a href="#FT002">FT002</a><br>
 //! As an unauthenticated user, I'd like to sign in through the REST API by using HTTP POST in order to send my user name and password and receive
-//! an yuthentication token that will be used in the future requests.
+//! an authentication token that will be used in the future requests.
 //! The web-service listens on the default HTTPS port (443). This can be changed by configuration.
 //! \code
 //! POST https://<server_URL>[optional_port]/users/login
@@ -72,6 +72,18 @@
 //!         -# <b>400 Bad Request:</b> Unknown error occurred
 //!         -# <b>401 Unauthorized:</b> The request tried to access resource that is forbidden for it
 //!         .
+//!     Getting back a particular configuration has been done by HTTP GET request:
+//!     \code
+//!     GET https://<server_URL>[optional_port]/configuration/<username>/<key>
+//!     \endcode
+//!     The operation can result the following error codes:
+//!         -# <b>200 OK:</b> Returned by the new resource
+//!         -# <b>400 Bad Request:</b> Unknown error occurred
+//!         -# <b>401 Unauthorized:</b> The request tried to access resource that is forbidden for it
+//!         -# <b>404 Not Found:</b> The request tried to access resource that is not exists on the server
+//!         .
+//!     Querying multiple resource at once isn't supported yet.
+//!
 //!     If the client wants to delete item (e.g.: its not needed anymore), then it can be done by sending a DELETE request:
 //!     \code
 //!     DELETE https://<server_URL>[optional_port]/configuration/<username>/<key_to_be_deleted>
@@ -126,7 +138,7 @@
 //!         id SERIAL,
 //!         username VARCHAR(256) NOT NULL,
 //!         email VARCHAR(256) NOT NULL,
-//!         pwd VARCHAR(256) NOT NULL,
+//!         pwd VARCHAR(128) NOT NULL,
 //!         logoff TIMESTAMP WITH TIME ZONE,
 //!         CONSTRAINT unique_constraints UNIQUE(username, email, pwd),
 //!         CONSTRAINT users_pk PRIMARY KEY (id));
