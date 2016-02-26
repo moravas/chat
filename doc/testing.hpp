@@ -9,7 +9,7 @@
 //! \page integration Integration test
 //! \tableofcontents
 //!
-//! \section intro Introduction
+//! \section introduction Introduction
 //! The aim of integration tests is to verify the software that it provides the desired behavior against to the particular user story.
 //!
 //! \section test_items Test items
@@ -36,7 +36,7 @@
 //!         <th>Response</th></tr>
 //!     <tr><td>
 //!         \code
-//!         POST https://localhost/users/register
+//!         POST http://localhost/users/register
 //!         Content-Type: application/json
 //!         {
 //!         "username": "Bob",
@@ -50,7 +50,7 @@
 //!         </td></tr>
 //!     <tr><td>
 //!         \code
-//!         POST https://localhost/users/register
+//!         POST http://localhost/users/register
 //!         Content-Type: application/json
 //!         {
 //!         "username": "ValidBob",
@@ -64,7 +64,7 @@
 //!         </td></tr>
 //!     <tr><td>
 //!         \code
-//!         POST https://localhost/users/register
+//!         POST http://localhost/users/register
 //!         Content-Type: application/json
 //!         {
 //!         "username": "ValidBob",
@@ -78,7 +78,7 @@
 //!         </td></tr>
 //!     <tr><td>
 //!         \code
-//!         POST https://localhost/users/register
+//!         POST http://localhost/users/register
 //!         Content-Type: application/json
 //!         {
 //!         "username": "ValidBob",
@@ -92,7 +92,7 @@
 //!         </td></tr>
 //!     <tr><td>
 //!         \code
-//!         POST https://localhost/users/register
+//!         POST http://localhost/users/register
 //!         Content-Type: application/json
 //!         {
 //!         "username": "ValidBob",
@@ -107,6 +107,7 @@
 //! </table>
 //!
 //! \subsection TST002 TST002: Add configuration data
+//! \subsection TST004 TST004: Add configuration data
 //! <b>Covered user story:</b> US003: User configuration data management
 //!
 //! The purpose of this test is to verify the server capability to handle requests correctly which target configuration data insertion regarding a
@@ -114,7 +115,7 @@
 //! -# Acquire a resource
 //! -# Perform login
 //! -# Acquire the same resource as before
-//! -# Require the server to store resource and check its availability
+//! -# Request the server to store resource and check its availability
 //! -# Update the resource that is already inserted and check its availability
 //! -# Delete the resource and check the existence of it.
 //! .
@@ -122,6 +123,90 @@
 //! <b>Setup:</b><br>
 //! Start the web-service on Linux platform and sends the client registration HTTP requests to it. Be careful: the order of requests in the table below
 //! is important to guaranty the right result of test.
+//!
+//! <table>
+//!     <tr> <th>API Request</th>
+//!         <th>Response</th></tr>
+//!     <tr><td>
+//!         \code
+//!         GET http://localhost/configuration/ValidBob/background
+//!         \endcode
+//!         </td>
+//!         <td>
+//!         401 Unauthorized
+//!         </td></tr>
+//!     <tr><td>
+//!         \code
+//!         POST http://localhost/users/login
+//!         Content-Type: application/json
+//!         {
+//!         "username": "ValidBob",
+//!         "password": "ValidBob123"
+//!         }
+//!         \endcode
+//!         </td>
+//!         <td>
+//!         200 OK and the authentication token
+//!         </td></tr>
+//!     <tr><td>
+//!         \code
+//!         GET http://localhost/configuration/ValidBob/background
+//!         X-Authentication-Token:
+//!         \endcode
+//!         </td>
+//!         <td>
+//!         404 Not Found
+//!         </td></tr>
+//!     <tr><td>
+//!         \code
+//!         POST http://localhost/configuration/ValidBob
+//!         X-Authentication-Token:
+//!         Content-Type: application/json
+//!         {"background": "0xFFFFFF"}
+//!         \endcode
+//!         </td>
+//!         <td>
+//!         201 Created
+//!         </td></tr>
+//!     <tr><td>
+//!         \code
+//!         GET http://localhost/configuration/ValidBob/background
+//!         X-Authentication-Token:
+//!         \endcode
+//!         </td>
+//!         <td>
+//!         200 OK and the resource: {"background": "0xFFFFFF"}
+//!         </td></tr>
+//!     <tr><td>
+//!         \code
+//!         POST http://localhost/configuration/ValidBob
+//!         X-Authentication-Token:
+//!         Content-Type: application/json
+//!         {"background": "0xFFFFF0"}
+//!         \endcode
+//!         </td>
+//!         <td>
+//!         200 OK
+//!         </td></tr>
+//!     <tr><td>
+//!         \code
+//!         GET http://localhost/configuration/ValidBob/background
+//!         X-Authentication-Token:
+//!         \endcode
+//!         </td>
+//!         <td>
+//!         200 OK and the resource: {"background": "0xFFFFF0"}
+//!         </td></tr>
+//!     <tr><td>
+//!         \code
+//!         DELETE http://localhost/configuration/ValidBob/background
+//!         X-Authentication-Token:
+//!         \endcode
+//!         </td>
+//!         <td>
+//!         200 OK
+//!         </td></tr>
+//! </table>
 //!
 // =============================================================================
 //! \file

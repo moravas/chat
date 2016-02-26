@@ -10,7 +10,7 @@
 //! \tableofcontents
 //! \section userstory User stories
 //!
-//! \subsection US002 US002: Request authentication
+//! \subsection US002 US002: User authentication
 //! <b>Affected features:</b> <a href="#FT002">FT002</a><br>
 //! As an unauthenticated user, I'd like to sign in through the REST API by using HTTP POST in order to send my user name and password and receive
 //! an authentication token that will be used in the future requests.
