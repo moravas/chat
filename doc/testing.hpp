@@ -106,8 +106,50 @@
 //!         </td></tr>
 //! </table>
 //!
-//! \subsection TST002 TST002: Add configuration data
-//! \subsection TST004 TST004: Add configuration data
+//! \subsection TST002 TST002: Loggin in
+//! <b>Covered user story:</b> US004: Create user account
+//!
+//! <b>Setup:</b><br>
+//!
+//! \subsection TST003 TST003: Delete credentials
+//! <b>Covered user story:</b> US004: Create user account
+//!
+//! <b>Setup:</b><br>
+//! Start the web-service on Linux platform and registrer a new user on the server by ValidBob#ValidBob123#bob@domain.com then log in with the
+//! new credentials. If everithing went well, perform the following requests on the server:
+//! -# Delete the account on the server
+//! -# Try to log on onto the server
+//! .
+//!
+//! <table>
+//!     <tr> <th>API Request</th>
+//!         <th>Response</th></tr>
+//!     <tr><td>
+//!         \code
+//!         DELETE http://localhost/users/ValidBob
+//!         X-Authentication-Token:
+//!         \endcode
+//!         </td>
+//!         <td>
+//!         200 OK
+//!         </td></tr>
+//!     <tr><td>
+//!         \code
+//!         POST http://localhost/users/login
+//!         Content-Type: application/json
+//!         {
+//!         "username": "ValidBob",
+//!         "password": "ValidBob123",
+//!         }
+//!         \endcode
+//!         </td>
+//!         <td>
+//!         401 Unauthorized
+//!         </td></tr>
+//! </table>
+//!
+//!
+//! \subsection TST004 TST004: Handle configuration data
 //! <b>Covered user story:</b> US003: User configuration data management
 //!
 //! The purpose of this test is to verify the server capability to handle requests correctly which target configuration data insertion regarding a
