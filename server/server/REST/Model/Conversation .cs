@@ -18,7 +18,7 @@ namespace Server
         public string Message { get; set; }
 
         [ForeignKey("SenderID")]
-        public User User { get; set; }
+        public virtual User User { get; set; }
         public uint SenderID { get; set; }
     }
 }
