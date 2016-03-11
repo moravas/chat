@@ -3,15 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server
 {
-    class Attachments
+    class Configuration
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public uint ID { get; set; }
+        public ulong ID { get; set; }
 
         [Required]
-        [MaxLength(256, ErrorMessage = "Expected attachment name is too long")]
-        public string Name { get; set; }
+        public string Key { get; set; }
 
         [Required]
         public byte[] Value { get; set; }

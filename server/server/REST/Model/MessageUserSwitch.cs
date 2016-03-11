@@ -5,7 +5,7 @@ namespace Server
     class MessageUserSwitch
     {
         [ForeignKey("ConversationID")]
-        public Conversations Conversation { get; set; }
+        public Conversation Conversation { get; set; }
         public ulong ConversationID { get; set; }
 
         [ForeignKey("UserID")]

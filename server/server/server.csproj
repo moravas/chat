@@ -119,7 +119,10 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="REST\Controller\Configurationcontroller.cs" />
-    <Compile Include="REST\Model\Configurations.cs" />
+    <Compile Include="REST\Model\Attachment.cs" />
+    <Compile Include="REST\Model\Configuration.cs" />
+    <Compile Include="REST\Model\Conversation .cs" />
+    <Compile Include="REST\Model\MessageUserSwitch.cs" />
     <Compile Include="REST\Model\User.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

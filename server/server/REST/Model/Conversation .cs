@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server
 {
-    class Conversations
+    class Conversation
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
