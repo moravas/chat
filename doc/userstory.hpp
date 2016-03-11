@@ -108,8 +108,8 @@
 //!     .
 //! The username:
 //!     -# Is between 6 and 256 characters
-//!     -# Starts with letter
-//!     -# Including numerical characters is allowed
+//!     -# Starts with alphanumerical character
+//!     -# Including '.' and '_' characters are allowed
 //!     .
 //! If these requirements are fulfilled, the web-server tries to append a new record into the user table. The user table uses the
 //! the user and password columns for primary key. Due to security reasons, only the hash of password is stored. Both column is fixed size character
@@ -138,7 +138,7 @@
 //!         id SERIAL,
 //!         username VARCHAR(256) NOT NULL,
 //!         email VARCHAR(256) NOT NULL,
-//!         pwd VARCHAR(128) NOT NULL,
+//!         password VARCHAR(128) NOT NULL,
 //!         logoff TIMESTAMP WITH TIME ZONE,
 //!         CONSTRAINT unique_constraints UNIQUE(username, email, pwd),
 //!         CONSTRAINT users_pk PRIMARY KEY (id));
