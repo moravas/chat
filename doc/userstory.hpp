@@ -164,19 +164,19 @@
 //!     -# If a user wants to send binary information, it is persisted into the "attachments" table. As configurations, attachments are also assigned
 //!         to the user. Take an example: Alice sends Bob an image, the image is inserted by Bob's username into the table. The table stores the
 //!         following informations:
-//!         -# <b>key:</b> Automincremented key for the next attachment in the table
+//!         -# <b>id:</b> Automincremented key for the next attachment in the table
 //!         -# <b>name:</b> The original file name
-//!         -# <b>attachment:</b> The file itself
+//!         -# <b>value:</b> The file itself in binary stream representation
 //!         -# <b>user_id:</b> The user that the atteachment belongs to.
 //!         .
 //!     Creating the table has been done by the statement:
 //!     \code
 //!     CREATE TABLE attachments(
-//!         key SERIAL,
+//!         id SERIAL,
 //!         name VARCHAR(256) NOT NULL,
-//!         attachment BYTEA NOT NULL,
-//!         user_id SERIAL NOT NULL,
-//!         CONSTRAINT attachments_fk FOREIGN KEY (user_id) REFERENCES users (id),
+//!         value BYTEA NOT NULL,
+//!         userid SERIAL NOT NULL,
+//!         CONSTRAINT attachments_fk FOREIGN KEY (userid) REFERENCES users (id),
 //!         CONSTRAINT attachments_pk PRIMARY KEY (key));
 //!     \endcode
 //!     -# The "conversations" table stores the text based messages. It stores the following informations:
