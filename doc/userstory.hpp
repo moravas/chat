@@ -180,7 +180,7 @@
 //!         CONSTRAINT attachments_pk PRIMARY KEY (key));
 //!     \endcode
 //!     -# The "conversations" table stores the text based messages. It stores the following informations:
-//!         -# <b>key:</b> Automincremented key for the conversation
+//!         -# <b>id:</b> Automincremented key for the conversation
 //!         -# <b>time:</b> The date and time-stamp where the web-service receives the new message. The time-stamp holds the timezone information as
 //!             well, that could be differ from the timezone of the message sender. In that case it's up to the client to recalculate the correct
 //!             timezone.
@@ -191,12 +191,12 @@
 //!     Creating the table has been done by the statement:
 //!     \code
 //!     CREATE TABLE conversations (
-//!         key BIGSERIAL,
+//!         id BIGSERIAL,
 //!         time TIMESTAMP WITH TIME ZONE NOT NULL,
 //!         message TEXT NOT NULL,
-//!         sender_id SERIAL,
-//!         CONSTRAINT conversations_sender_fk FOREIGN KEY (sender_id) REFERENCES users (id),
-//!         CONSTRAINT conversations_pk PRIMARY KEY (key));
+//!         senderid SERIAL,
+//!         CONSTRAINT conversations_sender_fk FOREIGN KEY (senderid) REFERENCES users (id),
+//!         CONSTRAINT conversations_pk PRIMARY KEY (id));
 //!     \endcode
 //!     In order to create connection between the message and the user, an additonal switch table should be used, that stores:
 //!         -# <b>message:</b> The Id of the message
