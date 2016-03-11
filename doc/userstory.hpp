@@ -204,10 +204,10 @@
 //!     Creating the table has been done by the statement:
 //!     \code
 //!     CREATE TABLE message_user_switch (
-//!         message BIGSERIAL NOT NULL,
-//!         user SERIAL NOT NULL,
-//!         CONSTRAINT message_user_switch_message_fk FOREIGN KEY (message) REFERENCES conversations (key),
-//!         CONSTRAINT message_user_switch_user_fk FOREIGN KEY (user) REFERENCES users (id));
+//!         messageid BIGSERIAL NOT NULL,
+//!         userid SERIAL NOT NULL,
+//!         CONSTRAINT message_user_switch_message_fk FOREIGN KEY (messageid) REFERENCES conversations (id),
+//!         CONSTRAINT message_user_switch_user_fk FOREIGN KEY (userid) REFERENCES users (id));
 //!     \endcode
 //!
 //! \subsection US006 US006: Conversation manager
