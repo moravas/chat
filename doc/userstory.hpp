@@ -14,9 +14,9 @@
 //! <b>Affected features:</b> <a href="#FT002">FT002</a><br>
 //! As an unauthenticated user, I'd like to sign in through the REST API by using HTTP POST in order to send my user name and password and receive
 //! an authentication token that will be used in the future requests.
-//! The web-service listens on the default HTTPS port (443). This can be changed by configuration.
+//! The web-service listens on the default http port (443). This can be changed by configuration.
 //! \code
-//! POST https://<server_URL>[optional_port]/users/login
+//! POST http://<server_URL>[optional_port]/users/login
 //! Content-Type: application/json
 //! {
 //!   "username": "some",
@@ -39,7 +39,7 @@
 //!
 //! If the client decides to leave the server finally, it can delete the account of user by the following request:
 //! \code
-//! DELETE https://<server_URL>[optional_port]/users/<username>
+//! DELETE http://<server_URL>[optional_port]/users/<username>
 //! \endcode
 //! This action causes deletion of its configurations as well.
 //!
@@ -58,7 +58,7 @@
 //!     <a href="#configuration_data">user configuration table</a>. The webservice client allowed to create new or update an existent configuration
 //!     item by the following request:
 //!     \code
-//!     POST https://<server_URL>[optional_port]/configuration/<username>
+//!     POST http://<server_URL>[optional_port]/configuration/<username>
 //!     Content-Type: application/json
 //!     {
 //!     "key_0": "value_0",
@@ -74,7 +74,7 @@
 //!         .
 //!     Getting back a particular configuration has been done by HTTP GET request:
 //!     \code
-//!     GET https://<server_URL>[optional_port]/configuration/<username>/<key>
+//!     GET http://<server_URL>[optional_port]/configuration/<username>/<key>
 //!     \endcode
 //!     The operation can result the following error codes:
 //!         -# <b>200 OK:</b> Returned by the new resource
@@ -86,15 +86,15 @@
 //!
 //!     If the client wants to delete item (e.g.: its not needed anymore), then it can be done by sending a DELETE request:
 //!     \code
-//!     DELETE https://<server_URL>[optional_port]/configuration/<username>/<key_to_be_deleted>
+//!     DELETE http://<server_URL>[optional_port]/configuration/<username>/<key_to_be_deleted>
 //!     \endcode
 //!     The operation result is <b>200 OK</b> in every cases.
 //!
 //! \subsection US004 US004: Create user account
 //! <b>Affected features:</b> <a href="#FT003">FT003</a><br>
-//! Client registration has been done via the following HTTPS request:<br>
+//! Client registration has been done via the following http request:<br>
 //! \code
-//! POST https://<server_URL>[optional_port]/users/register
+//! POST http://<server_URL>[optional_port]/users/register
 //! Content-Type: application/json
 //! {
 //! "username": "some",
