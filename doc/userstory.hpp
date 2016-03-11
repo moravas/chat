@@ -145,6 +145,7 @@
 //!     \endcode
 //!     -# <div id="configuration_data"> The "configurations" table is used by the clients to store they client side configurations.The table
 //!         stores the following informations:
+//!         -# <b>id:</b> autoincremented integer key
 //!         -# <b>key:</b> The text represented key that the user uses to access the particular option
 //!         -# <b>value:</b> The current configuration value
 //!         -# <b>user_id:</b> The username that the configuration records belongs to
@@ -152,11 +153,12 @@
 //!     Creating the table has been done by the statement:
 //!     \code
 //!     CREATE TABLE configurations(
-//!         key TEXT,
+//!     	id BIGSERIAL,
+//!         key TEXT NOT NULL,
 //!         value BYTEA NOT NULL,
-//!         user_id SERIAL NOT NULL,
-//!         CONSTRAINT configurations_fk FOREIGN KEY (user_id) REFERENCES users (id),
-//!         CONSTRAINT configurations_pk PRIMARY KEY (key));
+//!         userid SERIAL NOT NULL,
+//!         CONSTRAINT configurations_fk FOREIGN KEY (userid) REFERENCES users (id),
+//!         CONSTRAINT configurations_pk PRIMARY KEY (id));
 //!     \endcode
 //!     </div>
 //!     -# If a user wants to send binary information, it is persisted into the "attachments" table. As configurations, attachments are also assigned
