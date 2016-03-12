@@ -1,21 +1,24 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server
 {
     public class User
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public uint ID { get; set; }
 
-        [StringLength(256, ErrorMessage = "Username length exceds the maximum.")]
-        public string Username { get; set; }
+        [RegularExpression(@"^[a-zA-Z0-9]{1}[a-zA-Z0-9_.]{5,255}$", ErrorMessage = "Invalid username")]
+        public string UserName { get; set; }
 
-        [StringLength(256, ErrorMessage = "Email length exceds the maximum.")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [StringLength(128, ErrorMessage = "Password length exceds the maximum.")]
+        [Range(128, 128, ErrorMessage = "Invalid password length")]
         public string Password { get; set; }
+
         public DateTime Logoff { get; set; }
     }
 }

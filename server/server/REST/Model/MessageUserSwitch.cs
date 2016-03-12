@@ -1,13 +1,15 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server
 {
-    public class MessageUserSwitch
+    class MessageUserSwitch
     {
-        [Key]
-        public ulong MessageID { get; set; }
+        [ForeignKey("ConversationID")]
+        public virtual Conversation Conversation { get; set; }
+        public ulong ConversationID { get; set; }
 
+        [ForeignKey("UserID")]
+        public virtual User User { get; set; }
         public uint UserID { get; set; }
     }
 }
