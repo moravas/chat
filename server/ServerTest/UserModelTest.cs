@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Server;
 
@@ -14,14 +13,14 @@ namespace ServerTest
         public void SetUp()
         {
             db = new UsersDB();
-            db.Database.CreateIfNotExists();
             db.Users.Create();
         }
 
         [TestCleanup]
         public void TearDown()
         {
-            db.Database.Delete();
+            db.Users.RemoveRange(db.Users);
+            db.SaveChanges();
         }
 
         [TestMethod]
@@ -31,7 +30,6 @@ namespace ServerTest
             db.SaveChanges();
             foreach(User user in db.Users)
             {
-                Assert.AreEqual(user.ID, 0);
                 Assert.AreEqual(user.UserName, "ValidBob");
                 Assert.AreEqual(user.Email, "validbob@email.com");
                 Assert.AreEqual(user.Password, "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567");
