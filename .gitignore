@@ -5,3 +5,5 @@ server/.vs/server/v14/.suo
 server/server/bin/*
 server/packages/*
 *.orig
+server/ServerTest/bin/*
+server/ServerTest/obj/*
