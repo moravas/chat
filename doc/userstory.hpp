@@ -140,7 +140,7 @@
 //!         email VARCHAR(256) NOT NULL,
 //!         password VARCHAR(128) NOT NULL,
 //!         logoff TIMESTAMP WITH TIME ZONE,
-//!         CONSTRAINT unique_constraints UNIQUE(username, email, pwd),
+//!         CONSTRAINT unique_constraints UNIQUE(username, email, password),
 //!         CONSTRAINT users_pk PRIMARY KEY (id));
 //!     \endcode
 //!     -# <div id="configuration_data"> The "configurations" table is used by the clients to store they client side configurations.The table
