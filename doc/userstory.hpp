@@ -177,7 +177,7 @@
 //!         value BYTEA NOT NULL,
 //!         userid SERIAL NOT NULL,
 //!         CONSTRAINT attachments_fk FOREIGN KEY (userid) REFERENCES users (id),
-//!         CONSTRAINT attachments_pk PRIMARY KEY (key));
+//!         CONSTRAINT attachments_pk PRIMARY KEY (id));
 //!     \endcode
 //!     -# The "conversations" table stores the text based messages. It stores the following informations:
 //!         -# <b>id:</b> Automincremented key for the conversation
