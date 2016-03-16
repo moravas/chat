@@ -71,9 +71,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\server\server.csproj">
+    <ProjectReference Include="..\server\Server.csproj">
       <Project>{7a5689e9-f077-4b7c-825f-5d9ee0d8547d}</Project>
-      <Name>server</Name>
+      <Name>Server</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
