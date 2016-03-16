@@ -7,3 +7,5 @@ server/packages/*
 *.orig
 server/ServerTest/bin/*
 server/ServerTest/obj/*
+server/Core/bin/*
+server/Core/obj/*
