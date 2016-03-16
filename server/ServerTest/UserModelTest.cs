@@ -14,14 +14,14 @@ namespace ServerTest
         public void SetUp()
         {
             db = new UsersDB();
+            db.Database.CreateIfNotExists();
             db.Users.Create();
         }
 
         [TestCleanup]
         public void TearDown()
         {
-            db.Users.RemoveRange(db.Users);
-            db.SaveChanges();
+            db.Database.Delete();
         }
 
         [TestMethod]
