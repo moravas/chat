@@ -104,7 +104,7 @@
 //! \endcode
 //! The password:
 //!     -# Must be at least 8 long
-//!     -# Must include numbers, lowercase and uppercase letters
+//!     -# Must include at least 2 numerical character, 2 lowercase and 2 uppercase characters
 //!     .
 //! The username:
 //!     -# Is between 6 and 256 characters
