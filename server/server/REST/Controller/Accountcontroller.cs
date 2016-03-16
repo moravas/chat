@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Web.Http;
+
+using Core;
 
 namespace Server
 {
@@ -31,7 +33,11 @@ namespace Server
         [HttpPost]
         public HttpResponseMessage Register(User user)
         {
-            if(!IsValidPasswodForm(user.Password))
+            PasswordValidator validator = new PasswordValidator() { MinLenght = 8 , Statements = new List<ValidatorStatement>()};
+            validator.Statements.Add(new ValidatorStatement { ExpectedAtLeast = 2, Data = "0123456789" });
+            validator.Statements.Add(new ValidatorStatement { ExpectedAtLeast = 2, Data = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" });
+            validator.Statements.Add(new ValidatorStatement { ExpectedAtLeast = 2, Data = "abcdefghijklmnopqrstuvwxyz" });
+            if (!validator.Validate(user.Password))
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
@@ -42,40 +48,6 @@ namespace Server
             }
 
             return Request.CreateResponse(HttpStatusCode.Created);
-        }
-
-        private bool IsValidPasswodForm(string password)
-        {
-            if(password.Length < 8 && password.Length > 256)
-            {
-                return false;
-            }
-
-            //^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,10}
-            Regex LowerCaseValidator = new Regex(@"[a-z]{1}");
-            Regex UpperCaseValidator = new Regex(@"[A-Z]{1}");
-            Regex NumberValidator = new Regex(@"[0-9]{1}");
-
-            int Number = 0;
-            int LowerCase = 0;
-            int UpperCase = 0;
-            foreach(char c in password)
-            {
-                if(LowerCaseValidator.IsMatch(c.ToString()))
-                {
-                    LowerCase++;
-                }
-                else if (UpperCaseValidator.IsMatch(c.ToString()))
-                {
-                    UpperCase++;
-                }
-                else if (NumberValidator.IsMatch(c.ToString()))
-                {
-                    Number++;
-                }
-            }
-
-            return (Number > 1 && UpperCase > 1 && LowerCase > 1);
         }
     }
 }
