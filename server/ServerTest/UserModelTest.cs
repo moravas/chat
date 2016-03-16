@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Server;
 
@@ -35,6 +36,42 @@ namespace ServerTest
                 Assert.AreEqual(user.Password, "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567");
                 Assert.AreEqual(user.Logoff, null);
             }
+        }
+
+        [TestMethod]
+        public void InsertMalformedUserName()
+        {
+            User user = GetPreparedUser();
+            user.UserName = "_ValidBob";
+            db.Users.Add(user);
+            Assert.IsNotNull(db.GetValidationErrors().Count());
+        }
+
+        [TestMethod]
+        public void InsertShortUserName()
+        {
+            User user = GetPreparedUser();
+            user.UserName = "Bob";
+            db.Users.Add(user);
+            Assert.IsNotNull(db.GetValidationErrors().Count());
+        }
+
+        [TestMethod]
+        public void InsertMalformedEmail()
+        {
+            User user = GetPreparedUser();
+            user.Email = "validbob_at_email.com";
+            db.Users.Add(user);
+            Assert.IsNotNull(db.GetValidationErrors().Count());
+        }
+
+        [TestMethod]
+        public void InsertMalformedPassword()
+        {
+            User user = GetPreparedUser();
+            user.Password = "somePwd";
+            db.Users.Add(user);
+            Assert.IsNotNull(db.GetValidationErrors().Count());
         }
 
         private User GetPreparedUser()
