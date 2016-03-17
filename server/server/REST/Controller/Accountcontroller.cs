@@ -8,6 +8,7 @@ using System.Web.Http;
 
 using Core;
 using System.Linq;
+using System.Data.Entity.Infrastructure;
 
 namespace Server
 {
@@ -17,6 +18,7 @@ namespace Server
         public AccountController(): base()
         {
             _db = new UsersDB();
+            _db.Database.CreateIfNotExists();
             _validator = new PasswordValidator() { MinLenght = 8, Statements = new List<ValidatorStatement>() };
             _validator.Statements.Add(new ValidatorStatement { ExpectedAtLeast = 2, Data = new HashSet<char>("0123456789") });
             _validator.Statements.Add(new ValidatorStatement { ExpectedAtLeast = 2, Data = new HashSet<char>("ABCDEFGHIJKLMNOPQRSTUVWXYZ") });
@@ -54,12 +56,20 @@ namespace Server
             }
 
             _db.Users.Add(user);
-            if(0 != _db.GetValidationErrors().Count())
+            if(_db.GetValidationErrors().Any())
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
 
-            _db.SaveChanges();
+            try
+            {
+                _db.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                return Request.CreateResponse(HttpStatusCode.Conflict);
+            }
+
             return Request.CreateResponse(HttpStatusCode.Created);
         }
 

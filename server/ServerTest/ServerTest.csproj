@@ -69,7 +69,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="AccountControllerTest.cs" />
+    <Compile Include="AccountcontrollerTest.cs" />
     <Compile Include="UserModelTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -21,11 +21,13 @@ namespace Server
         public int ID { get; set; }
 
         [Column("username")]
+        [Index(Order = 1, IsUnique = true)]
         [RegularExpression(@"^[a-zA-Z0-9]{1}[a-zA-Z0-9_.]{5,255}$", ErrorMessage = "Invalid username")]
         public string UserName { get; set; }
 
         [Column("email")]
         [EmailAddress]
+        [Index(Order = 2, IsUnique = true)]
         public string Email { get; set; }
 
         [Column("password")]

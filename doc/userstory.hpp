@@ -109,7 +109,7 @@
 //! The username:
 //!     -# Is between 6 and 256 characters
 //!     -# Starts with alphanumerical character
-//!     -# Including '.' and '_' characters are allowed
+//!     -# Can include any special character
 //!     .
 //! If these requirements are fulfilled, the web-server tries to append a new record into the user table. The user table uses the
 //! the user and password columns for primary key. Due to security reasons, only the hash of password is stored. Both column is fixed size character
