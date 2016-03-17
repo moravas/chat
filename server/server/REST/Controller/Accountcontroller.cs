@@ -7,12 +7,22 @@ using System.Text;
 using System.Web.Http;
 
 using Core;
+using System.Linq;
 
 namespace Server
 {
     [RoutePrefix("users")]
     public class AccountController : ApiController
     {
+        public AccountController(): base()
+        {
+            _db = new UsersDB();
+            _validator = new PasswordValidator() { MinLenght = 8, Statements = new List<ValidatorStatement>() };
+            _validator.Statements.Add(new ValidatorStatement { ExpectedAtLeast = 2, Data = new HashSet<char>("0123456789") });
+            _validator.Statements.Add(new ValidatorStatement { ExpectedAtLeast = 2, Data = new HashSet<char>("ABCDEFGHIJKLMNOPQRSTUVWXYZ") });
+            _validator.Statements.Add(new ValidatorStatement { ExpectedAtLeast = 2, Data = new HashSet<char>("abcdefghijklmnopqrstuvwxyz") });
+        }
+
         [Route("{username}")]
         [HttpDelete]
         public string DeleteUserAccount(string username)
@@ -33,11 +43,7 @@ namespace Server
         [HttpPost]
         public HttpResponseMessage Register(User user)
         {
-            PasswordValidator validator = new PasswordValidator() { MinLenght = 8 , Statements = new List<ValidatorStatement>()};
-            validator.Statements.Add(new ValidatorStatement { ExpectedAtLeast = 2, Data = "0123456789" });
-            validator.Statements.Add(new ValidatorStatement { ExpectedAtLeast = 2, Data = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" });
-            validator.Statements.Add(new ValidatorStatement { ExpectedAtLeast = 2, Data = "abcdefghijklmnopqrstuvwxyz" });
-            if (!validator.Validate(user.Password))
+            if (!_validator.Validate(user.Password))
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
@@ -47,7 +53,17 @@ namespace Server
                 user.Password = BitConverter.ToString(sha.ComputeHash(Encoding.UTF8.GetBytes(user.Password))).Replace("-", string.Empty);
             }
 
+            _db.Users.Add(user);
+            if(0 != _db.GetValidationErrors().Count())
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+
+            _db.SaveChanges();
             return Request.CreateResponse(HttpStatusCode.Created);
         }
+
+        private UsersDB             _db;
+        private PasswordValidator   _validator;
     }
 }
