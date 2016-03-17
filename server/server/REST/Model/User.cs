@@ -25,7 +25,7 @@ namespace Server
         public string UserName { get; set; }
 
         [Column("email")]
-        [DataType(DataType.EmailAddress)]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Column("password")]
