@@ -44,7 +44,7 @@ namespace ServerTest
             User user = GetPreparedUser();
             user.UserName = "_ValidBob";
             db.Users.Add(user);
-            Assert.IsNotNull(db.GetValidationErrors().Count());
+            Assert.IsTrue(db.GetValidationErrors().Any());
         }
 
         [TestMethod]
@@ -53,7 +53,7 @@ namespace ServerTest
             User user = GetPreparedUser();
             user.UserName = "Bob";
             db.Users.Add(user);
-            Assert.IsNotNull(db.GetValidationErrors().Count());
+            Assert.IsTrue(db.GetValidationErrors().Any());
         }
 
         [TestMethod]
@@ -62,7 +62,7 @@ namespace ServerTest
             User user = GetPreparedUser();
             user.Email = "validbob_at_email.com";
             db.Users.Add(user);
-            Assert.IsNotNull(db.GetValidationErrors().Count());
+            Assert.IsTrue(db.GetValidationErrors().Any());
         }
 
         [TestMethod]
@@ -71,7 +71,7 @@ namespace ServerTest
             User user = GetPreparedUser();
             user.Password = "somePwd";
             db.Users.Add(user);
-            Assert.IsNotNull(db.GetValidationErrors().Count());
+            Assert.IsTrue(db.GetValidationErrors().Any());
         }
 
         private User GetPreparedUser()
