@@ -9,3 +9,5 @@ server/ServerTest/bin/*
 server/ServerTest/obj/*
 server/Core/bin/*
 server/Core/obj/*
+server/CoreTest/bin/*
+server/CoreTest/obj/*

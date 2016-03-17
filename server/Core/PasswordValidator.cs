@@ -6,7 +6,7 @@ namespace Core
     public class ValidatorStatement
     {
         public int ExpectedAtLeast { get; set; }
-        public IEnumerable<char> Data { get; set; }
+        public HashSet<char> Data { get; set; }
     }
 
     public class PasswordValidator
