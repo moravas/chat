@@ -10,17 +10,14 @@ namespace Server
         [HttpDelete]
         public string DeleteConfiguration(string username, string configurationKey)
         {
-            Console.WriteLine(username);
-            Console.WriteLine(configurationKey);
-            return "DeleteConfiguration";
+            throw new NotImplementedException();
         }
 
         [Route("{username}")]
         [HttpPost]
         public string Update(string username)
         {
-            Console.WriteLine(Request.Content);
-            return "Updated";
+            throw new NotImplementedException();
         }
     }
 }

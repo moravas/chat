@@ -27,18 +27,23 @@ namespace Server
 
         [Route("{username}")]
         [HttpDelete]
-        public string DeleteUserAccount(string username)
+        public string Delete(string username)
         {
-            Console.WriteLine(username);
-            return "DeleteUserAccount";
+            throw new NotImplementedException();
         }
 
         [Route("login")]
-        [HttpGet]
-        public string GetLogin([FromBody] string credentials)
+        [HttpPost]
+        public string LogIn(User user)
         {
-            Console.WriteLine(credentials);
-            return "Login";
+            throw new NotImplementedException();
+        }
+
+        [Route("logout/{username}")]
+        [HttpGet]
+        public string LogOut(string username)
+        {
+            throw new NotImplementedException();
         }
 
         [Route("register")]
