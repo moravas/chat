@@ -16,7 +16,7 @@
 //! an authentication token that will be used in the future requests.
 //! The web-service listens on the default http port (443). This can be changed by configuration.
 //! \code
-//! POST http://<server_URL>[optional_port]/users/login
+//! POST http://<server_URL>/users/login
 //! Content-Type: application/json
 //! {
 //!   "username": "some",
@@ -39,7 +39,7 @@
 //!
 //! If the client decides to leave the server finally, it can delete the account of user by the following request:
 //! \code
-//! DELETE http://<server_URL>[optional_port]/users/<username>
+//! DELETE http://<server_URL>/users/<username>
 //! \endcode
 //! This action causes deletion of its configurations as well.
 //!
@@ -58,7 +58,7 @@
 //!     <a href="#configuration_data">user configuration table</a>. The webservice client allowed to create new or update an existent configuration
 //!     item by the following request:
 //!     \code
-//!     POST http://<server_URL>[optional_port]/configuration/<username>
+//!     POST http://<server_URL>/configuration/<username>
 //!     Content-Type: application/json
 //!     {
 //!     "key_0": "value_0",
@@ -74,7 +74,7 @@
 //!         .
 //!     Getting back a particular configuration has been done by HTTP GET request:
 //!     \code
-//!     GET http://<server_URL>[optional_port]/configuration/<username>/<key>
+//!     GET http://<server_URL>/configuration/<username>/<key>
 //!     \endcode
 //!     The operation can result the following error codes:
 //!         -# <b>200 OK:</b> Returned by the new resource
@@ -86,7 +86,7 @@
 //!
 //!     If the client wants to delete item (e.g.: its not needed anymore), then it can be done by sending a DELETE request:
 //!     \code
-//!     DELETE http://<server_URL>[optional_port]/configuration/<username>/<key_to_be_deleted>
+//!     DELETE http://<server_URL>/configuration/<username>/<key_to_be_deleted>
 //!     \endcode
 //!     The operation result is <b>200 OK</b> in every cases.
 //!
@@ -94,7 +94,7 @@
 //! <b>Affected features:</b> <a href="#FT003">FT003</a><br>
 //! Client registration has been done via the following http request:<br>
 //! \code
-//! POST http://<server_URL>[optional_port]/users/register
+//! POST http://<server_URL>/users/register
 //! Content-Type: application/json
 //! {
 //! "username": "some",
@@ -221,7 +221,7 @@
 //! \code
 //!     { "id": "124", "invite":[ {"username":"user"} ]}
 //! \endcode
-//! The examples above are similar. The only difference is that the first one creates a new session as well otherwise invites the user "user" into
+//! The examples above are similar. The only difference is that the first one creates a new session but the other one invites the user "user" into
 //! the session labeled by session ID "124". Invited users are represented as array even if only one user were invited. Closing a session is very
 //! similar:
 //! \code
