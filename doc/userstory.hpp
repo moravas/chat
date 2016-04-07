@@ -10,6 +10,17 @@
 //! \tableofcontents
 //! \section userstory User stories
 //!
+//! \subsection US001 US001: User password security
+//! <b>Affected features:</b> <a href="#FT002">FT002</a><br>
+//! If a user registers to use a service that expect authentication, he expects him credentials to be in safe. So user passwords are stored in 
+//! encrypted form. To encrypt it, the SHA256 hash is generated from the master key and used AES based encryption.
+//!
+//! The master key is an in-memory password that the system reads in at start from a file. The file path specified as command line argument as 
+//! <em> -keyfile \< path_to_file \> </em> that allow administrators to store the file in separated devices and remove it after system start.
+//!
+//! The MasterKeyManager uses singleton pattern to exist in the system and provide the full functionality to encrypt passwords going trough the
+//! REST API controllers.
+//!
 //! \subsection US002 US002: User authentication
 //! <b>Affected features:</b> <a href="#FT002">FT002</a><br>
 //! As an unauthenticated user, I'd like to sign in through the REST API by using HTTP POST in order to send my user name and password and receive
@@ -117,7 +128,7 @@
 //! address also stored in a text column and a regexp should check whether it contains the '@' and '.' characters.<br>
 //! Depend on the success of the user account creation, the client receives the following error codes:
 //!     -# <b>201 Created: </b>Everything went fine, the user credential is active and the user now can log in.
-//!     -# <b>400 Bad Request: </b>One or more argument of the registration is not fulfill the required form.
+//!     -# <b>400 Bad Request: </b>One or more argument of the registration is not fulfil the required form.
 //!     -# <b>409 Conflict: </b>There is an user already registered with the same username and password.
 //!
 //! \subsection US005 US005: Database
@@ -129,7 +140,7 @@
 //!         -# <b>id:</b> autoincremented integer key
 //!         -# <b>username:</b> 256 character max length, stores the username
 //!         -# <b>email:</b> 256 character max length, stores the email address of the user
-//!         -# <b>pwd:</b> 256 character max length, stores the SHA512 hash of the password
+//!         -# <b>pwd:</b> the encrypted password
 //!         -# <b>logoff:</b> The last log off time of the user. Using it optional and can affect the client side operations
 //!         .
 //!     Creating the table has been done by the statement:
@@ -167,7 +178,7 @@
 //!         -# <b>id:</b> Automincremented key for the next attachment in the table
 //!         -# <b>name:</b> The original file name
 //!         -# <b>value:</b> The file itself in binary stream representation
-//!         -# <b>user_id:</b> The user that the atteachment belongs to.
+//!         -# <b>user_id:</b> The user that the attachment belongs to.
 //!         .
 //!     Creating the table has been done by the statement:
 //!     \code
@@ -198,7 +209,7 @@
 //!         CONSTRAINT conversations_sender_fk FOREIGN KEY (senderid) REFERENCES users (id),
 //!         CONSTRAINT conversations_pk PRIMARY KEY (id));
 //!     \endcode
-//!     In order to create connection between the message and the user, an additonal switch table should be used, that stores:
+//!     In order to create connection between the message and the user, an additional switch table should be used, that stores:
 //!         -# <b>message:</b> The Id of the message
 //!         -# <b>user:</b> The user who received the message
 //!     Creating the table has been done by the statement:
@@ -222,7 +233,7 @@
 //!     { "id": "124", "invite":[ {"username":"user"} ]}
 //! \endcode
 //! The examples above are similar. The only difference is that the first one creates a new session but the other one invites the user "user" into
-//! the session labeled by session ID "124". Invited users are represented as array even if only one user were invited. Closing a session is very
+//! the session labelled by session ID "124". Invited users are represented as array even if only one user were invited. Closing a session is very
 //! similar:
 //! \code
 //!     { "id": "124", "close":"user" }
