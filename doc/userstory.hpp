@@ -100,8 +100,9 @@
 //!     The operation result is <b>200 OK</b> in every cases.
 //!
 //! \subsection US004 US004: User account control
-//! <b>Affected features:</b> <a href="#FT003">FT003</a><br>
-//! Regarding a particular user account, the client allowed to create or delete accounts on the server if these requests satisfies their requirements.
+//! <b>Affected features:</b> <a href="#FT003">FT003</a>, <a href="#FT004">FT004</a><br>
+//! Regarding a particular user account, the client allowed to create, delete accounts on the server and query the list of registered users if these 
+//! requests satisfies their requirements.
 //! \subsubsection create_user_account Create user account
 //! Creating a new account can be done by the following request:
 //! \code
@@ -131,7 +132,6 @@
 //!     -# <b>400 Bad Request: </b>One or more argument of the registration is not fulfil the required form.
 //!     -# <b>409 Conflict: </b>There is an user already registered with the same username and password.
 //!
-//!
 //! \subsubsection delete_user_account Delete user account
 //! The account can be deleted by the following authenticated request:
 //! \code
@@ -140,6 +140,25 @@
 //! The operation results one of the following error codes:
 //!     -# <b>200 OK: </b>The user credentials are no longer available.
 //!     -# <b>401 Unauthorized: </b>Invalid authentication.
+//!
+//! \subsubsection query_user_list Query users
+//! If an authenticated client wants to query the list of registered users, e.g.: displaying it for the human user, it can be done by the following
+//! <a href="#US002">authenticated</a> query:
+//! \code
+//! GET http://<server_URL>/users
+//! \endcode
+//! The operation results the list of users in JSON represented form:
+//! \code
+//! HTTP/1.1 200 OK
+//! Content-Type: application/json
+//! {
+//! "users": ["ValidBob", "Alice", "Suzy"]
+//! }
+//! \endcode
+//! The operation results one of the following error codes:
+//!     -# <b>200 OK: </b>The client gets back the requested list. Please note, that the request never ever should return empty list because it means that
+//!         an unauthorized request went trough the identification
+//!     -# <b>401 Unauthorized: </b>Invalid authentication
 //!
 //! \subsection US005 US005: Database
 //! <b>Depends on user stories:</b> </a><br>

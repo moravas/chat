@@ -10,7 +10,7 @@
 //! \tableofcontents
 //!
 //! \section introduction Introduction
-//! The aim of integration tests is to verify the software that it provides the desired behavior against to the particular user story.
+//! The aim of integration tests is to verify the software that it provides the desired behaviour against to the particular user story.
 //!
 //! \section test_items Test items
 //! Every feature delivered to the user should be covered by integration test. For the detailed list of affected features see \ref tested_features
@@ -106,7 +106,7 @@
 //!         </td></tr>
 //! </table>
 //!
-//! \subsection TST002 TST002: Loggin in
+//! \subsection TST002 TST002: Logging in
 //! <b>Covered user story:</b> US004: Create user account
 //!
 //! <b>Setup:</b><br>
@@ -115,8 +115,8 @@
 //! <b>Covered user story:</b> US004: Create user account
 //!
 //! <b>Setup:</b><br>
-//! Start the web-service on Linux platform and registrer a new user on the server by ValidBob#ValidBob123#bob@domain.com then log in with the
-//! new credentials. If everithing went well, perform the following requests on the server:
+//! Start the web-service on Linux platform and register a new user on the server by ValidBob#ValidBob123#bob\@domain.com then log in with the
+//! new credentials. If everything went well, perform the following requests on the server:
 //! -# Delete the account on the server
 //! -# Try to log on onto the server
 //! .
