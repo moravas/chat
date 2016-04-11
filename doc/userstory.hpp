@@ -21,38 +21,36 @@
 //! The MasterKeyManager uses singleton pattern to exist in the system and provide the full functionality to encrypt passwords going trough the
 //! REST API controllers.
 //!
-//! \subsection US002 US002: User authentication
-//! <b>Affected features:</b> <a href="#FT002">FT002</a><br>
-//! As an unauthenticated user, I'd like to sign in through the REST API by using HTTP POST in order to send my user name and password and receive
-//! an authentication token that will be used in the future requests.
-//! The web-service listens on the default http port (443). This can be changed by configuration.
+//! \subsection US002 US002: Request authentication
+//! <b>Affected features:</b>
+//! <a href="#FT002">FT002</a>,
+//! <a href="#FT004">FT004</a>,
+//! <a href="#FT005">FT005</a>,
+//! <a href="#FT006">FT006</a>,
+//! <a href="#FT007">FT007</a>,
+//! <a href="#FT008">FT008</a><br>
+//! If the server receives a REST API request, it must be authenticated before executing it. The digest based authentication uses HMAC scheme with 
+//! SHA512 where the signature hash is the concatenation of the following fields:
+//! -# HTTP method
+//! -# Request URI
+//! -# Username
+//! -# Timestamp in UNIX time represented form
+//! -# Nonce, which can be a GUID or whatever else that the client choose
+//! -# The request payload if it's present in base 64 string represented form
+//! .
+//! The generated signature concatenated together the username, timestamp nonce and placed into the "Authorization" header. They are separated by ':'
+//! character:
 //! \code
-//! POST http://<server_URL>/users/login
-//! Content-Type: application/json
-//! {
-//!   "username": "some",
-//!   "password": "pwd",
-//! }
+//! Authorization: <username>:<base_64_represented_signature>:<timestamp>:<nonce>
 //! \endcode
-//! If the login is successful, the client receives the HTTP 200 OK response:
-//! \code
-//! Content-Type: application/json
-//! {
-//!   "token": "***TOKEN***",
-//! }
-//! \endcode
-//! else the client receives the HTTP 401 Unauthorized.
+//! If a request arrived and authentication is required, the nonce and the timestamp are cached in Redis in-memory cache with 5 minutes expiration 
+//! time. By this way the memory occupation is under control. The signature is valid if (the order of the enumeration defines the validation steps):
+//! -# The timestamp in the authentication header isn't older as 5 minutes
+//! -# There is no similar item in the cache
+//! -# The server can regenerate the same hash knowing the nonce, timestamp and username as the request contains
 //!
-//! In the subsequent requests, the following additional header is included:
-//! \code
-//! X-Authentication-Token: ***TOKEN***
-//! \endcode
-//!
-//! If the client decides to leave the server finally, it can delete the account of user by the following request:
-//! \code
-//! DELETE http://<server_URL>/users/<username>
-//! \endcode
-//! This action causes deletion of its configurations as well.
+//! \warning The memory overflow control helps to maintain memory consumption in case of normal operation but unable to prevent a DOS attack, when 
+//! the system can be flooded by thousands of requests.
 //!
 //! \subsection US003 US003: Configuration management
 //! <b>Affected features:</b> <a href="#FT002">FT002</a>, <a href="#FT008">FT008</a><br>
@@ -101,35 +99,47 @@
 //!     \endcode
 //!     The operation result is <b>200 OK</b> in every cases.
 //!
-//! \subsection US004 US004: Create user account
+//! \subsection US004 US004: User account control
 //! <b>Affected features:</b> <a href="#FT003">FT003</a><br>
-//! Client registration has been done via the following http request:<br>
+//! Regarding a particular user account, the client allowed to create or delete accounts on the server if these requests satisfies their requirements.
+//! \subsubsection create_user_account Create user account
+//! Creating a new account can be done by the following request:
 //! \code
 //! POST http://<server_URL>/users/register
 //! Content-Type: application/json
 //! {
-//! "username": "some",
-//! "password": "pwd",
-//! "email": "emailaddress"
+//! "username": "ValidBob",
+//! "password": "ValidBob123",
+//! "email": "bob@domain.com"
 //! }
 //! \endcode
-//! The password:
-//!     -# Must be at least 8 long
-//!     -# Must include at least 2 numerical character, 2 lowercase and 2 uppercase characters
-//!     .
-//! The username:
+//! Where the fields included in the request fulfil the followings:
+//! -# The username:
 //!     -# Is between 6 and 256 characters
 //!     -# Starts with alphanumerical character
 //!     -# Can include any special character
 //!     .
-//! If these requirements are fulfilled, the web-server tries to append a new record into the user table. The user table uses the
-//! the user and password columns for primary key. Due to security reasons, only the hash of password is stored. Both column is fixed size character
-//! represented, and the size is derived from the maximal length of the username and the output size of the SHA512 algorithm. The email
-//! address also stored in a text column and a regexp should check whether it contains the '@' and '.' characters.<br>
-//! Depend on the success of the user account creation, the client receives the following error codes:
+//! -# The password:
+//!     -# Must be at least 8 long
+//!     -# Must include at least 2 numerical character, 2 lower-case and 2 upper-case characters
+//!     .
+//! -# The email address satisfies the well-known email format: someid@domain.domain:
+//! .
+//! If these requirements are fulfilled, the web-server tries to append a new record into the user table. Due to security reasons, the password is 
+//! <a href="#US001">encrypted</a>. The operation results one of the following error codes:
 //!     -# <b>201 Created: </b>Everything went fine, the user credential is active and the user now can log in.
 //!     -# <b>400 Bad Request: </b>One or more argument of the registration is not fulfil the required form.
 //!     -# <b>409 Conflict: </b>There is an user already registered with the same username and password.
+//!
+//!
+//! \subsubsection delete_user_account Delete user account
+//! The account can be deleted by the following authenticated request:
+//! \code
+//! DELETE http://<server_URL>/users/<username>
+//! \endcode
+//! The operation results one of the following error codes:
+//!     -# <b>200 OK: </b>The user credentials are no longer available.
+//!     -# <b>401 Unauthorized: </b>Invalid authentication.
 //!
 //! \subsection US005 US005: Database
 //! <b>Depends on user stories:</b> </a><br>
